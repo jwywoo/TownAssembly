@@ -39,7 +39,7 @@ public class Campaign extends Timestamped {
         this.username = username;
     }
 
-    public void update(CampaignRequestDto requestDto, String username) {
+    public void update(CampaignRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
