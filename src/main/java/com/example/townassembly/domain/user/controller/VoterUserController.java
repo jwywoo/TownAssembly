@@ -3,6 +3,7 @@ package com.example.townassembly.domain.user.controller;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
 import com.example.townassembly.domain.user.service.VoterUserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,10 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class VoterUserController {
 
     private final VoterUserService voterUserService;
-
-    public VoterUserController(VoterUserService voterUserService) {this.voterUserService = voterUserService;}
 
     @PostMapping("/user/signup")
     public ResponseEntity<String> signup(@RequestBody @Valid SignupRequestDto requestDto, BindingResult bindingResult) {
@@ -36,7 +36,4 @@ public class VoterUserController {
         voterUserService.signup(requestDto);
         return ResponseEntity.ok().body(String.valueOf(HttpStatus.OK.value()));
     }
-
-
-
 }
