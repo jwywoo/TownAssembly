@@ -1,5 +1,7 @@
 package com.example.townassembly.domain.user.entity;
 
+import com.example.townassembly.domain.user.dto.SignupRequestDto;
+import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,41 +10,33 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "voterUser")
-public class VoterUser {
+public class VoterUser extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String voterId;
+    private String username;
 
     @Column(nullable = false)
-    private String voterPw;
+    private String password;
 
-    @Column(nullable = true)
-    private String email;
-
-    @Column(nullable = true)
-    private String preferredParty;
-
-    @Column(nullable = true)
-    private String district;
+//    @Column(nullable = true)
+//    private String email;
+//
+//    @Column(nullable = true)
+//    private String preferredParty;
+//
+//    @Column(nullable = true)
+//    private String district;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public VoterUser(String voterId, String voterPw, UserRoleEnum role) {
-        this.voterId = voterId;
-        this.voterPw = voterPw;
+    public VoterUser(String username, String password, UserRoleEnum role) {
+        this.username = username;
+        this.password = password;
         this.role = role;
     }
-
-//    public VoterUser(SignupRequestDto requestDto) {
-//        this.voterId = requestDto.getVoterId();
-//        this.voterPw = requestDto.getVoterPw();
-//        this.role = requestDto.isAdminCheck() ? UserRoleEnum.USER : UserRoleEnum.ADMIN;
-//    }
-
-
 }

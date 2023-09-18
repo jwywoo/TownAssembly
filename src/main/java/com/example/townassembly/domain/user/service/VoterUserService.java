@@ -1,5 +1,6 @@
 package com.example.townassembly.domain.user.service;
 
+
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.entity.VoterUser;
@@ -19,15 +20,16 @@ public class VoterUserService {
     private final VoterUserRepository voterUserRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     public ResponseEntity<String> signup(SignupRequestDto requestDto) {
-        String voterId = requestDto.getVoterId();
-        String voterPw = passwordEncoder.encode(requestDto.getVoterPw());
+        String username = requestDto.getUsername();
+        String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인
-        Optional<VoterUser> checkId = voterUserRepository.findByVoterId(voterId);
-        if (checkId.isPresent()) {
+        Optional<VoterUser> checkUsername = voterUserRepository.findByUsername(username);
+        if (checkUsername.isPresent()) {
             return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 사용자가 존재합니다.");
         }
 
@@ -41,7 +43,7 @@ public class VoterUserService {
         }
 
         // 사용자 등록
-        VoterUser voterUser = new VoterUser(voterId, voterPw, role);
+        VoterUser voterUser = new VoterUser(username, password, role);
         voterUserRepository.save(voterUser);
         return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
     }

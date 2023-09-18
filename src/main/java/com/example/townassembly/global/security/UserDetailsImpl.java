@@ -19,10 +19,10 @@ public class UserDetailsImpl implements UserDetails {
     public VoterUser getVoterUser() {return voterUser;}
 
     @Override
-    public String getPassword() { return voterUser.getVoterPw();}
+    public String getPassword() { return voterUser.getPassword();}
 
     @Override
-    public String getUsername() { return voterUser.getVoterId();}
+    public String getUsername() { return voterUser.getUsername();}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
