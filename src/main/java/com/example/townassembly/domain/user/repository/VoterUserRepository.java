@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 
-public interface VoterUserRepository extends JpaRepository<VoterUser, String> {
-
-    Optional<VoterUser> findByVoterId(String voterId);
-
+public interface VoterUserRepository extends JpaRepository<VoterUser, Long> {
+    Optional<VoterUser> findByUsername(String name);
 }

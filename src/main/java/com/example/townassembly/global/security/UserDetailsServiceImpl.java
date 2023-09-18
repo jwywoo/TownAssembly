@@ -15,9 +15,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final VoterUserRepository voterUserRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String voterId) throws UsernameNotFoundException {
-        VoterUser voterUser = voterUserRepository.findById(voterId)
-                .orElseThrow(() -> new UsernameNotFoundException("Not Found " + voterId));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        VoterUser voterUser = voterUserRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Not Found " + username));
 
         return new UserDetailsImpl(voterUser);
     }

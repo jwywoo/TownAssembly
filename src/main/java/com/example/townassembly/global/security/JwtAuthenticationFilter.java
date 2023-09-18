@@ -28,8 +28,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDto.class);
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            requestDto.getVoterId(),
-                            requestDto.getVoterPw(),
+                            requestDto.getUsername(),
+                            requestDto.getPassword(),
                             null
                     )
             );
@@ -40,10 +40,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
-        String voterId = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
+        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getVoterUser().getRole();
 
-        String token = jwtUtil.createToken(voterId, role);
+        String token = jwtUtil.createToken(username, role);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
     }
 
