@@ -7,6 +7,7 @@ build/
 
 ## config.properties -> 모든 시크릿키 저장소
 application-db.properties
+application-aws.properties
 
 ### STS ###
 .apt_generated

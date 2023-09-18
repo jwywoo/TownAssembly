@@ -1,7 +1,7 @@
 package com.example.townassembly.domain.user.controller;
 
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
-import com.example.townassembly.domain.user.service.VoterUserService;
+import com.example.townassembly.domain.user.service.PoliticianUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class VoterUserController {
+public class PoliticianUserController {
 
-    private final VoterUserService voterUserService;
+    private final PoliticianUserService politicianUserService;
 
     @PostMapping("/user/signup")
     public ResponseEntity<String> signup(@RequestBody @Valid SignupRequestDto requestDto, BindingResult bindingResult) {
@@ -33,7 +33,7 @@ public class VoterUserController {
                 ResponseEntity.badRequest().body(String.valueOf(HttpStatus.BAD_REQUEST.value()));
             }
         }
-        voterUserService.signup(requestDto);
+        politicianUserService.signup(requestDto);
         return ResponseEntity.ok().body(String.valueOf(HttpStatus.OK.value()));
     }
 }
