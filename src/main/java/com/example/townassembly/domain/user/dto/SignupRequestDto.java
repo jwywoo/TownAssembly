@@ -1,5 +1,8 @@
 package com.example.townassembly.domain.user.dto;
 
+import com.example.townassembly.domain.comment.comment.entity.Comment;
+import com.example.townassembly.domain.post.campaign.entity.Campaign;
+import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -16,8 +19,8 @@ public class SignupRequestDto {
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]*$", message = "비밀번호는 대/소문자, 숫자,특수문자 가능합니다.")
     private String password;
 
-//    private boolean adminCheck;
-
     private boolean admin = false;
     private String adminToken = "";
+
+    private boolean voterUser = false;
 }
