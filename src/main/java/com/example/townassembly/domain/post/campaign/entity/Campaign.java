@@ -1,7 +1,7 @@
 package com.example.townassembly.domain.post.campaign.entity;
 
 import com.example.townassembly.domain.post.campaign.dto.CampaignRequestDto;
-import com.example.townassembly.domain.user.entity.PoliticianUser;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -33,7 +33,7 @@ public class Campaign extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PoliticianUser_id", nullable = false)
-    private PoliticianUser politicianUser;
+    private User user;
 
     public Campaign(CampaignRequestDto requestDto, String username) {
         this.title = requestDto.getTitle();

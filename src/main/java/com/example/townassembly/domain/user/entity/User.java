@@ -2,7 +2,6 @@ package com.example.townassembly.domain.user.entity;
 
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
-import com.example.townassembly.domain.user.dto.SignupRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "PoliticianUser")
-public class PoliticianUser {
+@Table(name = "User")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,7 +43,7 @@ public class PoliticianUser {
 //    @Column(nullable = true)
 //    private String district;
 
-    public PoliticianUser(String username, String password, UserRoleEnum role) {
+    public User(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.role = role;

@@ -1,7 +1,7 @@
 package com.example.townassembly.global.security;
 
 
-import com.example.townassembly.domain.user.entity.PoliticianUser;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,21 +12,21 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 //    private final User user;
-    private final PoliticianUser politicianUser;
+    private final User user;
 
-    public UserDetailsImpl(PoliticianUser politicianUser) { this.politicianUser = politicianUser; }
+    public UserDetailsImpl(User user) { this.user = user; }
 
-    public PoliticianUser getPoliticianUser() {return politicianUser;}
-
-    @Override
-    public String getPassword() { return politicianUser.getPassword();}
+    public User getPoliticianUser() {return user;}
 
     @Override
-    public String getUsername() { return politicianUser.getUsername();}
+    public String getPassword() { return user.getPassword();}
+
+    @Override
+    public String getUsername() { return user.getUsername();}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        UserRoleEnum role = politicianUser.getRole();
+        UserRoleEnum role = user.getRole();
         String authority = role.getAuthority();
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
