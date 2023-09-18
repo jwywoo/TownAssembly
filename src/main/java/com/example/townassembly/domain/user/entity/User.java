@@ -23,6 +23,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false, unique = true)
+    private String nickName;
+
     @Column(nullable = false)
     private String password;
 
@@ -31,16 +34,20 @@ public class User {
     private UserRoleEnum role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Opinion> opinionList = new ArrayList<>();;
+    private List<Opinion> opinionList = new ArrayList<>();
+    ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Campaign> campaignList = new ArrayList<>();;
+    private List<Campaign> campaignList = new ArrayList<>();
+    ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Comment> commentList = new ArrayList<>();;
+    private List<Comment> commentList = new ArrayList<>();
+    ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Complement> complementList = new ArrayList<>();;
+    private List<Complement> complementList = new ArrayList<>();
+    ;
 
     //    @Column(nullable = true)
 //    private String email;
@@ -51,7 +58,7 @@ public class User {
 //    @Column(nullable = true)
 //    private String district;
 
-    public User(String username, String password, UserRoleEnum role) {
+    public User(String username, String password, String nickName, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.role = role;
