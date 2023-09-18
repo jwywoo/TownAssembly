@@ -1,5 +1,7 @@
 package com.example.townassembly.domain.user.entity;
 
+import com.example.townassembly.domain.comment.comment.entity.Comment;
+import com.example.townassembly.domain.comment.complement.entity.Complement;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import jakarta.persistence.*;
@@ -28,11 +30,17 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @OneToMany(mappedBy = "politicianUser", cascade = CascadeType.REMOVE)
-    private List<Opinion> opinionList;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Opinion> opinionList = new ArrayList<>();;
 
-    @OneToMany(mappedBy = "politicianUser", cascade = CascadeType.REMOVE)
-    private List<Campaign> campaignList;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Campaign> campaignList = new ArrayList<>();;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList = new ArrayList<>();;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Complement> complementList = new ArrayList<>();;
 
     //    @Column(nullable = true)
 //    private String email;
@@ -47,8 +55,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.opinionList = new ArrayList<>();
-        this.campaignList = new ArrayList<>();
 
 //        if (role == UserRoleEnum.voterUser) {
 //            this.opinionList = null;

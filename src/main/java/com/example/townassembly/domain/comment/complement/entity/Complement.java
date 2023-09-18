@@ -1,6 +1,7 @@
 package com.example.townassembly.domain.comment.complement.entity;
 
 import com.example.townassembly.domain.comment.complement.dto.ComplementRequestDto;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,12 +25,9 @@ public class Complement extends Timestamped {
     @Column(name ="content", nullable = false)
     private String content;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User userBy;
-//
-//    @Column(name="userfor", nullable = false)
-//    private Long userFor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Complement(ComplementRequestDto requestDto, String username) {
         this.username = username;

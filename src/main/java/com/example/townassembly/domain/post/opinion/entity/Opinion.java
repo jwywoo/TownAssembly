@@ -23,7 +23,7 @@ public class Opinion extends Timestamped {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PoliticianUser_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Opinion(OpinionRequestDto requestDto, String username) {

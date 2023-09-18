@@ -32,7 +32,7 @@ public class Campaign extends Timestamped {
     private byte[] imageThumbnail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PoliticianUser_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Campaign(CampaignRequestDto requestDto, String username) {

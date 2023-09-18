@@ -1,12 +1,8 @@
 package com.example.townassembly.domain.user.dto;
 
-import com.example.townassembly.domain.comment.comment.entity.Comment;
-import com.example.townassembly.domain.post.campaign.entity.Campaign;
-import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class SignupRequestDto {
