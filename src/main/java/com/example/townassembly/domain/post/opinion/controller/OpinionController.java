@@ -25,7 +25,7 @@ public class OpinionController {
         return opinionService.opinionCreate(requestDto, userDetails.getUser());
     }
     // Read
-    @GetMapping("/opinion")
+    @GetMapping("/opinions")
     public List<OpinionResponseDto> opinionList(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return opinionService.opinionList(userDetails.getUser());
     }

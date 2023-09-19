@@ -30,7 +30,7 @@ public class Opinion extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "opinion")
     private List<Comment> commentList = new ArrayList<>();
 
     public Opinion(OpinionRequestDto requestDto, User user) {

@@ -28,10 +28,10 @@ public class Campaign extends Timestamped {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name="thumbnail", nullable = false)
+    @Column(name="thumbnail")
     private byte[] imageThumbnail;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

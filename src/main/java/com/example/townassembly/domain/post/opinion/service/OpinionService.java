@@ -21,14 +21,10 @@ public class OpinionService {
     private final OpinionRepository opinionRepository;
 
     public OpinionResponseDto opinionCreate(OpinionRequestDto requestDto, User user) {
-        Opinion opinion = opinionRepository.save(
-                new Opinion(
-                        requestDto,
-                        user
-                )
-        );
-        user.opinionAdd(opinion);
-        return new OpinionResponseDto(opinion);
+
+        Opinion newOpinion = new Opinion(requestDto, user);
+        user.opinionAdd(newOpinion);
+        return new OpinionResponseDto(opinionRepository.save(newOpinion));
     }
 
     public List<OpinionResponseDto> opinionList(User user) {

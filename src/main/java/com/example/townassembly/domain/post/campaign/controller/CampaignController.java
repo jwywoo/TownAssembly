@@ -38,7 +38,8 @@ public class CampaignController {
 
     // Update
     @PutMapping("/campaign/{id}")
-    public CampaignResponseDto campaignUpdate(@PathVariable Long id, CampaignRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public CampaignResponseDto campaignUpdate(@PathVariable Long id,@RequestBody CampaignRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info(requestDto.getContent());
         return campaignService.campaignUpdate(id, requestDto, userDetails.getUser());
     }
 

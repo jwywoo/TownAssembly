@@ -23,17 +23,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final OpinionRepository opinionRepository;
 
+    @Transactional
     public CommentResponseDto commentCreate(CommentRequestDto requestDto, Long opinionId, User user) {
         Opinion opinion = findByIdOpinion(opinionId);
-        Comment comment = commentRepository.save(
-                new Comment(
-                        requestDto,
-                        user
-                )
-        );
-        user.commentAdd(comment);
-        opinion.commentAdd(comment);
-        return new CommentResponseDto(comment);
+        Comment newComment = new Comment(requestDto, user);
+        user.commentAdd(newComment);
+        opinion.commentAdd(newComment);
+        return new CommentResponseDto(commentRepository.save(newComment));
     }
 
     public List<CommentResponseDto> commentList(User user) {
