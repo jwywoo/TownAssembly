@@ -1,12 +1,16 @@
 package com.example.townassembly.domain.comment.comment.entity;
 
 import com.example.townassembly.domain.comment.comment.dto.CommentRequestDto;
+import com.example.townassembly.domain.comment.like.entity.CommentLike;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +30,9 @@ public class Comment extends Timestamped {
     @Column(name ="content", nullable = false)
     private String content;
 
+    @Column(name ="likeCnt", nullable = false)
+    private Integer likeCnt = 0;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "opinion_id", nullable = false)
     private Opinion opinion;
@@ -33,6 +40,9 @@ public class Comment extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
+    private List<CommentLike> likedBy = new ArrayList<>();
 
     public Comment(CommentRequestDto requestDto, User user) {
         this.username = user.getUsername();
@@ -43,6 +53,14 @@ public class Comment extends Timestamped {
     public void update(CommentRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
+    }
+
+    public void increaseCnt() {
+        likeCnt ++;
+    }
+
+    public void decreaseCnt() {
+        likeCnt --;
     }
 
     public void setUser(User user) {

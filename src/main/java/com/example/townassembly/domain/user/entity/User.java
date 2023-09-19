@@ -2,6 +2,7 @@ package com.example.townassembly.domain.user.entity;
 
 import com.example.townassembly.domain.comment.comment.entity.Comment;
 import com.example.townassembly.domain.comment.complement.entity.Complement;
+import com.example.townassembly.domain.comment.like.entity.CommentLike;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import jakarta.persistence.*;
@@ -44,6 +45,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<CommentLike> likedWhat = new ArrayList<>();
 
     //    @Column(nullable = true)
 //    private String email;
