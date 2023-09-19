@@ -24,8 +24,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, unique = true)
-    private String nickName;
+//    @Column(nullable = false, unique = true)
+//    private String nickName;
 
     @Column(nullable = false)
     private String password;
@@ -58,11 +58,11 @@ public class User {
 //    @Column(nullable = true)
 //    private String district;
 
-    public User(String username, String password, String nickName, UserRoleEnum role) {
+    public User(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.nickName = nickName;
+//        this.nickName = nickName;
     }
 
     public void commentAdd(Comment comment) {
