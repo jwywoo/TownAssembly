@@ -82,6 +82,5 @@ public class User {
 
     public void opinionAdd(Opinion opinion) {
         this.opinionList.add(opinion);
-        opinion.setUser(this);
     }
 }

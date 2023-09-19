@@ -30,13 +30,14 @@ public class Opinion extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Comment> commentList = new ArrayList<>();
 
     public Opinion(OpinionRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.username = user.getUsername();
+        this.user = user;
     }
 
     public void update(OpinionRequestDto requestDto) {
@@ -49,7 +50,5 @@ public class Opinion extends Timestamped {
         comment.setOpinion(this);
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+
 }
