@@ -24,6 +24,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
@@ -51,8 +52,11 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("FE 혹은 http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowedOrigins(Arrays.asList("https://mini-4-fe.vercel.app"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -62,8 +66,11 @@ public class WebSecurityConfig {
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // CORS 설정
+        http.cors(httpSecurityCorsConfigurer -> corsConfigurationSource());
         // CSRF 설정
         http.csrf((csrf) -> csrf.disable());
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
