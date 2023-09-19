@@ -41,7 +41,6 @@ public class Campaign extends Timestamped {
         this.url = requestDto.getUrl();
         this.imageThumbnail = requestDto.getImageThumbnail();
         this.username = user.getUsername();
-        this.user = user;
     }
 
     public void update(CampaignRequestDto requestDto) {
@@ -49,5 +48,9 @@ public class Campaign extends Timestamped {
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
         this.imageThumbnail = requestDto.getImageThumbnail();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

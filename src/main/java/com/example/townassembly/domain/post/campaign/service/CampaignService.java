@@ -20,14 +20,9 @@ public class CampaignService {
     private final CampaignRepository campaignRepository;
     @Transactional
     public CampaignResponseDto campaignCreate(CampaignRequestDto requestDto, User user) {
-        Campaign campaign = campaignRepository.save(
-                new Campaign(
-                        requestDto,
-                        user
-                )
-        );
-        user.campaignAdd(campaign);
-        return new CampaignResponseDto(campaign);
+        Campaign newCampaign = new Campaign(requestDto, user);
+        user.campaignAdd(newCampaign);
+        return new CampaignResponseDto(campaignRepository.save(newCampaign));
     }
 
     public List<CampaignResponseDto> campaignList(User user) {

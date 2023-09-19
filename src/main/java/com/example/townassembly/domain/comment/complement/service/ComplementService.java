@@ -28,14 +28,13 @@ public class ComplementService {
         User forWhom = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
-        Complement complement = complementRepository.save(
-                new Complement(
-                        requestDto,
-                        user
-                )
+        Complement newComplement =new Complement(
+                requestDto,
+                user
         );
-        user.complementAdd(complement, forWhom);
-        return new ComplementResponseDto(complement);
+        user.complementAdd(newComplement, forWhom);
+
+        return new ComplementResponseDto(complementRepository.save(newComplement));
     }
 
     public List<ComplementResponseDto> complementList(User user) {

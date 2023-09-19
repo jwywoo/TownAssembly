@@ -40,13 +40,13 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Campaign> campaignList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<CommentLike> likedWhat = new ArrayList<>();
 
     //    @Column(nullable = true)
@@ -78,9 +78,11 @@ public class User {
 
     public void campaignAdd(Campaign campaign) {
         this.campaignList.add(campaign);
+        campaign.setUser(this);
     }
 
     public void opinionAdd(Opinion opinion) {
         this.opinionList.add(opinion);
+        opinion.setUser(this);
     }
 }
