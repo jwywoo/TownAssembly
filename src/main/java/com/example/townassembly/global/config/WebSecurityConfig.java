@@ -1,9 +1,8 @@
 package com.example.townassembly.global.config;
 
 import com.example.townassembly.global.jwt.JwtUtil;
-import com.example.townassembly.global.security.JwtAuthorizationFilter;
 import com.example.townassembly.global.security.JwtAuthenticationFilter;
-
+import com.example.townassembly.global.security.JwtAuthorizationFilter;
 import com.example.townassembly.global.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -24,7 +23,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
@@ -50,13 +48,16 @@ public class WebSecurityConfig {
 
     // Cors
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setExposedHeaders(List.of("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setMaxAge(1800L);
         configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -70,7 +71,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // CORS 설정
-        http.cors(httpSecurityCorsConfigurer -> corsConfigurationSource());
+        http.cors((cors) -> cors.configurationSource(configurationSource()));
         // CSRF 설정
         http.csrf((csrf) -> csrf.disable());
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
