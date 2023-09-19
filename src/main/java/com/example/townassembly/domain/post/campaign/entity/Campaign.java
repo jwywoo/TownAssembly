@@ -35,13 +35,12 @@ public class Campaign extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Campaign(CampaignRequestDto requestDto, String username) {
+    public Campaign(CampaignRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
         this.imageThumbnail = requestDto.getImageThumbnail();
-
-        this.username = username;
+        this.username = user.getUsername();
     }
 
     public void update(CampaignRequestDto requestDto) {
