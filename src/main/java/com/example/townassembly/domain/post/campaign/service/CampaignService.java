@@ -67,7 +67,7 @@ public class CampaignService {
         if (campaign.getUsername().equals(user.getUsername())) {
             campaignRepository.delete(campaign);
         } else {
-            throw new IllegalArgumentException("수정이 불가능합니다.");
+            throw new IllegalArgumentException("삭제가 불가능합니다.");
         }
         return new StringResponseDto("삭제성공", "200");
     }

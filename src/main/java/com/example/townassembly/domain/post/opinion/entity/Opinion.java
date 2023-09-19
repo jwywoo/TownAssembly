@@ -26,10 +26,10 @@ public class Opinion extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Opinion(OpinionRequestDto requestDto, String username) {
+    public Opinion(OpinionRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.username = username;
+        this.username = user.getUsername();
     }
 
     public void update(OpinionRequestDto requestDto) {
