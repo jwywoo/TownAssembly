@@ -58,14 +58,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
-
-//        if (role == UserRoleEnum.voterUser) {
-//            this.opinionList = null;
-//            this.campaignList = null;
-//        } else {
-//            this.opinionList = new ArrayList<>();
-//            this.campaignList = new ArrayList<>();
-//        }
+        this.nickName = nickName;
     }
 
     public void commentAdd(Comment comment) {

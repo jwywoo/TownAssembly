@@ -50,13 +50,6 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        // 일단 보류
-//        if (requestDto.isVoterUser()) {
-//            role = UserRoleEnum.voterUser;
-//            this.user.getOpinionList().clear();
-//            this.user.getCampaignList().clear();
-//        }
-
         // 사용자 등록
         User user = new User(username, password, nickname, role);
         userRepository.save(user);
