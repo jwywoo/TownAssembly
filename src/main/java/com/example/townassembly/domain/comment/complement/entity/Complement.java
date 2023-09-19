@@ -29,8 +29,12 @@ public class Complement extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Complement(ComplementRequestDto requestDto, String username) {
-        this.username = username;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="forWhom_id", nullable = false)
+    private User forWhom;
+
+    public Complement(ComplementRequestDto requestDto, User user) {
+        this.username = user.getUsername();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
@@ -42,5 +46,9 @@ public class Complement extends Timestamped {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setForWhom(User forWhom) {
+        this.forWhom = forWhom;
     }
 }

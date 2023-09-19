@@ -7,6 +7,7 @@ import com.example.townassembly.domain.comment.comment.entity.Comment;
 import com.example.townassembly.domain.comment.comment.repository.CommentRepository;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.dto.StringResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,40 +23,54 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final OpinionRepository opinionRepository;
 
-    public CommentResponseDto commentCreate(CommentRequestDto requestDto, Long opinionId) {
+    public CommentResponseDto commentCreate(CommentRequestDto requestDto, Long opinionId, User user) {
         Opinion opinion = findByIdOpinion(opinionId);
         Comment comment = commentRepository.save(
                 new Comment(
                         requestDto,
-                        "test",
-                        opinion
+                        user
                 )
         );
+        user.commentAdd(comment);
+        opinion.commentAdd(comment);
         return new CommentResponseDto(comment);
     }
 
-    public List<CommentResponseDto> commentList(String username) {
+    public List<CommentResponseDto> commentList(User user) {
         return this.commentRepository
-                .findAllByUsernameOrderByModifiedAtDesc(username)
+                .findAllByUsernameOrderByModifiedAtDesc(user.getUsername())
                 .stream()
                 .map(CommentResponseDto::new)
                 .toList();
     }
 
-    public CommentResponseDto commentDetail(Long id) {
-        return new CommentResponseDto(findById(id));
+    public CommentResponseDto commentDetail(Long id, User user) {
+        Comment selectedComment = null;
+        for (Comment comment:user.getCommentList()) {
+            if (id.equals(comment.getId())) selectedComment = comment;
+        }
+        if (selectedComment == null) throw new IllegalArgumentException("유효하지 않은 댓글입니다.");
+        return new CommentResponseDto(selectedComment);
     }
 
     @Transactional
-    public CommentResponseDto commentUpdate(Long id, CommentRequestDto requestDto) {
+    public CommentResponseDto commentUpdate(Long id, CommentRequestDto requestDto, User user) {
         Comment comment = findById(id);
-        comment.update(requestDto);
+        if (user.getUsername().equals(comment.getUsername())) {
+            comment.update(requestDto);
+        } else {
+            throw new IllegalArgumentException("수정할 수 없습니다.");
+        }
         return new CommentResponseDto(comment);
     }
 
-    public StringResponseDto commentDelete(Long id) {
+    public StringResponseDto commentDelete(Long id, User user) {
         Comment comment = findById(id);
-        commentRepository.delete(comment);
+        if (user.getUsername().equals(comment.getUsername())) {
+            commentRepository.delete(comment);
+        } else {
+            throw new IllegalArgumentException("삭제할 수 없습니다.");
+        }
         return new StringResponseDto("삭제성공", "200");
     }
 
