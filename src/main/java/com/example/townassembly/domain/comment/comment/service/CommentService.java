@@ -32,6 +32,7 @@ public class CommentService {
                         opinion
                 )
         );
+        user.commentAdd(comment);
         return new CommentResponseDto(comment);
     }
 

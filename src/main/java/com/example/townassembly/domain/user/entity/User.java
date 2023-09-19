@@ -65,9 +65,10 @@ public class User {
         this.commentList.add(comment);
         comment.setUser(this);
     }
-    public void complementAdd(Complement complement) {
+    public void complementAdd(Complement complement, User forWhom) {
         this.complementList.add(complement);
         complement.setUser(this);
+        complement.setForWhom(forWhom);
     }
     public void campaignAdd(Campaign campaign) {
             this.campaignList.add(campaign);
