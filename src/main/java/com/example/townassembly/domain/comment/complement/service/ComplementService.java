@@ -19,8 +19,6 @@ import java.util.List;
 public class ComplementService {
     private final ComplementRepository complementRepository;
     public ComplementResponseDto complementCreate(Long id, ComplementRequestDto requestDto) {
-        // ByWhom
-        // ToWhom
         Complement complement = complementRepository.save(
                 new Complement(
                         requestDto,
