@@ -35,19 +35,15 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Opinion> opinionList = new ArrayList<>();
-    ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Campaign> campaignList = new ArrayList<>();
-    ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
-    ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
-    ;
 
     //    @Column(nullable = true)
 //    private String email;
@@ -70,6 +66,22 @@ public class User {
 //            this.opinionList = new ArrayList<>();
 //            this.campaignList = new ArrayList<>();
 //        }
+    }
 
+    public void commentAdd(Comment comment) {
+        this.commentList.add(comment);
+        comment.setUser(this);
+    }
+    public void complementAdd(Complement complement) {
+        this.complementList.add(complement);
+        complement.setUser(this);
+    }
+    public void campaignAdd(Campaign campaign) {
+            this.campaignList.add(campaign);
+            campaign.setUser(this);
+    }
+    public void opinionAdd(Opinion opinion) {
+        this.opinionList.add(opinion);
+        opinion.setUser(this);
     }
 }

@@ -36,4 +36,8 @@ public class Opinion extends Timestamped {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
