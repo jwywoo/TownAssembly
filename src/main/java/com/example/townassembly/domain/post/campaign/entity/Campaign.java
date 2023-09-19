@@ -1,7 +1,7 @@
 package com.example.townassembly.domain.post.campaign.entity;
 
 import com.example.townassembly.domain.post.campaign.dto.CampaignRequestDto;
-import com.example.townassembly.domain.user.entity.PoliticianUser;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -32,16 +32,15 @@ public class Campaign extends Timestamped {
     private byte[] imageThumbnail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PoliticianUser_id", nullable = false)
-    private PoliticianUser politicianUser;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public Campaign(CampaignRequestDto requestDto, String username) {
+    public Campaign(CampaignRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
         this.imageThumbnail = requestDto.getImageThumbnail();
-
-        this.username = username;
+        this.username = user.getUsername();
     }
 
     public void update(CampaignRequestDto requestDto) {
@@ -49,7 +48,9 @@ public class Campaign extends Timestamped {
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
         this.imageThumbnail = requestDto.getImageThumbnail();
+    }
 
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

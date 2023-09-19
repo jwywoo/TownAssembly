@@ -4,6 +4,7 @@ import com.example.townassembly.domain.post.campaign.dto.CampaignRequestDto;
 import com.example.townassembly.domain.post.campaign.dto.CampaignResponseDto;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.campaign.repository.CampaignRepository;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.dto.StringResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,38 +18,57 @@ import java.util.List;
 @Slf4j(topic="CampaignService")
 public class CampaignService {
     private final CampaignRepository campaignRepository;
-    public CampaignResponseDto campaignCreate(CampaignRequestDto requestDto) {
+    public CampaignResponseDto campaignCreate(CampaignRequestDto requestDto, User user) {
         Campaign campaign = campaignRepository.save(
                 new Campaign(
                         requestDto,
-                        "test"
+                        user
                 )
         );
+        user.campaignAdd(campaign);
         return new CampaignResponseDto(campaign);
     }
 
-    public List<CampaignResponseDto> campaignList(String username) {
+    public List<CampaignResponseDto> campaignList(User user) {
+        // 변경 예정
         return campaignRepository
-                .findAllByUsernameOrderByModifiedAtDesc(username)
+                .findAllByUsernameOrderByModifiedAtDesc(user.getUsername())
                 .stream()
                 .map(CampaignResponseDto::new)
                 .toList();
     }
 
-    public CampaignResponseDto campaignDetail(Long id) {
-        return  new CampaignResponseDto(findById(id));
+    public CampaignResponseDto campaignDetail(Long id, User user) {
+        Campaign selectedCampaign = null;
+        for (Campaign campaign: user.getCampaignList()) {
+            if (id.equals(campaign.getId())) {
+                selectedCampaign = campaign;
+            }
+        }
+        if (selectedCampaign == null) {
+            throw new NullPointerException("유효하지 않은 활동입니다.");
+        }
+        return  new CampaignResponseDto(selectedCampaign);
     }
 
     @Transactional
-    public CampaignResponseDto campaignUpdate(Long id, CampaignRequestDto requestDto) {
+    public CampaignResponseDto campaignUpdate(Long id, CampaignRequestDto requestDto, User user) {
         Campaign campaign = findById(id);
-        campaign.update(requestDto);
+        if (campaign.getUsername().equals(user.getUsername())) {
+            campaign.update(requestDto);
+        } else {
+            throw new IllegalArgumentException("수정이 불가능합니다.");
+        }
         return new CampaignResponseDto(campaign);
     }
 
-    public StringResponseDto campaignDelete(Long id) {
+    public StringResponseDto campaignDelete(Long id, User user) {
         Campaign campaign = findById(id);
-        campaignRepository.delete(campaign);
+        if (campaign.getUsername().equals(user.getUsername())) {
+            campaignRepository.delete(campaign);
+        } else {
+            throw new IllegalArgumentException("수정이 불가능합니다.");
+        }
         return new StringResponseDto("삭제성공", "200");
     }
 

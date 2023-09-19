@@ -1,7 +1,7 @@
 package com.example.townassembly.global.security;
 
-import com.example.townassembly.domain.user.entity.PoliticianUser;
-import com.example.townassembly.domain.user.repository.PoliticianUserRepository;
+import com.example.townassembly.domain.user.entity.User;
+import com.example.townassembly.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final PoliticianUserRepository politicianUserRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        PoliticianUser politicianUser = politicianUserRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Not Found " + username));
 
-        return new UserDetailsImpl(politicianUser);
+        return new UserDetailsImpl(user);
     }
 }

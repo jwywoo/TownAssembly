@@ -1,7 +1,7 @@
 package com.example.townassembly.domain.post.opinion.entity;
 
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
-import com.example.townassembly.domain.user.entity.PoliticianUser;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,8 +23,8 @@ public class Opinion extends Timestamped {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PoliticianUser_id", nullable = false)
-    private PoliticianUser politicianUser;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Opinion(OpinionRequestDto requestDto, String username) {
         this.title = requestDto.getTitle();
@@ -35,5 +35,9 @@ public class Opinion extends Timestamped {
     public void update(OpinionRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

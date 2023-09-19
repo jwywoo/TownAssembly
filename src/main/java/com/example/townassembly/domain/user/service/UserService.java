@@ -1,28 +1,25 @@
 package com.example.townassembly.domain.user.service;
 
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
-import com.example.townassembly.domain.user.entity.PoliticianUser;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
-import com.example.townassembly.domain.user.repository.PoliticianUserRepository;
+import com.example.townassembly.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Optional;
-
-import static com.example.townassembly.domain.user.entity.UserRoleEnum.Authority.voterUser;
 
 @Service
 @RequiredArgsConstructor
-public class PoliticianUserService {
+public class UserService {
 
-    private final PoliticianUserRepository politicianUserRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private PoliticianUser politicianUser;
+    private User user;
 
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
@@ -30,11 +27,18 @@ public class PoliticianUserService {
     public ResponseEntity<String> signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
+        String nickname = requestDto.getNickname();
 
         // 회원 중복 확인
-        Optional<PoliticianUser> checkUsername = politicianUserRepository.findByUsername(username);
+        Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
             return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 사용자가 존재합니다.");
+        }
+
+        // Nickname 중복확인
+        Optional<User> checkNickname = userRepository.findByNickName(nickname);
+        if (checkNickname.isPresent()) {
+            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 활동명이 존재합니다.");
         }
 
         // 사용자 ROLE 확인
@@ -46,15 +50,9 @@ public class PoliticianUserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        if(requestDto.isVoterUser()) {
-            role = UserRoleEnum.voterUser;
-            politicianUser.getOpinionList().clear();
-            politicianUser.getCampaignList().clear();
-        }
-
         // 사용자 등록
-        PoliticianUser politicianUser = new PoliticianUser(username, password, role);
-        politicianUserRepository.save(politicianUser);
+        User user = new User(username, password, nickname, role);
+        userRepository.save(user);
         return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
     }
 
