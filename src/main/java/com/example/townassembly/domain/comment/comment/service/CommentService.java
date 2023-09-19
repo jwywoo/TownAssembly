@@ -28,11 +28,11 @@ public class CommentService {
         Comment comment = commentRepository.save(
                 new Comment(
                         requestDto,
-                        user,
-                        opinion
+                        user
                 )
         );
         user.commentAdd(comment);
+        opinion.commentAdd(comment);
         return new CommentResponseDto(comment);
     }
 
