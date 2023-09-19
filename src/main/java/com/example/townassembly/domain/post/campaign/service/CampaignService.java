@@ -18,6 +18,7 @@ import java.util.List;
 @Slf4j(topic="CampaignService")
 public class CampaignService {
     private final CampaignRepository campaignRepository;
+    @Transactional
     public CampaignResponseDto campaignCreate(CampaignRequestDto requestDto, User user) {
         Campaign campaign = campaignRepository.save(
                 new Campaign(
@@ -54,6 +55,7 @@ public class CampaignService {
     @Transactional
     public CampaignResponseDto campaignUpdate(Long id, CampaignRequestDto requestDto, User user) {
         Campaign campaign = findById(id);
+        log.info(requestDto.getContent());
         if (campaign.getUsername().equals(user.getUsername())) {
             campaign.update(requestDto);
         } else {

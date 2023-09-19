@@ -34,10 +34,10 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Opinion> opinionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Campaign> campaignList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
@@ -46,7 +46,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<CommentLike> likedWhat = new ArrayList<>();
 
     //    @Column(nullable = true)
@@ -69,15 +69,17 @@ public class User {
         this.commentList.add(comment);
         comment.setUser(this);
     }
+
     public void complementAdd(Complement complement, User forWhom) {
         this.complementList.add(complement);
         complement.setUser(this);
         complement.setForWhom(forWhom);
     }
+
     public void campaignAdd(Campaign campaign) {
-            this.campaignList.add(campaign);
-            campaign.setUser(this);
+        this.campaignList.add(campaign);
     }
+
     public void opinionAdd(Opinion opinion) {
         this.opinionList.add(opinion);
         opinion.setUser(this);

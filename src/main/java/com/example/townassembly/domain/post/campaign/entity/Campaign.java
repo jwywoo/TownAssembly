@@ -28,10 +28,10 @@ public class Campaign extends Timestamped {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name="thumbnail", nullable = false)
+    @Column(name="thumbnail")
     private byte[] imageThumbnail;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -41,6 +41,7 @@ public class Campaign extends Timestamped {
         this.url = requestDto.getUrl();
         this.imageThumbnail = requestDto.getImageThumbnail();
         this.username = user.getUsername();
+        this.user = user;
     }
 
     public void update(CampaignRequestDto requestDto) {
@@ -48,9 +49,5 @@ public class Campaign extends Timestamped {
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
         this.imageThumbnail = requestDto.getImageThumbnail();
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
