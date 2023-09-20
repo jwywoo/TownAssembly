@@ -13,7 +13,7 @@ public class OpinionResponseDto {
     private final String opinionTitle;
     private final String opinionContent;
     private final String opinionUsername;
-    // Like Status, Like Count need
+
 
     public OpinionResponseDto(Opinion opinion) {
         this.opinionId = opinion.getId();

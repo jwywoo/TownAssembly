@@ -3,11 +3,13 @@ package com.example.townassembly.domain.post.opinion.controller;
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoDetail;
+import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoList;
 import com.example.townassembly.domain.post.opinion.service.OpinionService;
 import com.example.townassembly.global.dto.StringResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,21 +35,20 @@ public class OpinionController {
     }
     // Specific User's opinionList
     @GetMapping("/opinions/{id}")
-    public List<OpinionResponseDto> selectedOpinionList(@PathVariable Long id) {
-        return opinionService.selectedOpinionList(id);
+    public List<OpinionResponseDtoList> selectedOpinionList(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return opinionService.selectedUserOpinionList(id, userDetails.getUser());
     }
 
     // User's specific opinion
-    @GetMapping("/opinion/{id}")
-    public OpinionResponseDto opinionDetail(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return opinionService.opinionDetail(id, userDetails.getUser());
-    }
+//    @GetMapping("/opinion")
+//    public OpinionResponseDto opinionDetail(@RequestParam("id") Long id,  @AuthenticationPrincipal UserDetailsImpl userDetails){
+//        return opinionService.opinionDetail(id, userDetails.getUser());
+//    }
     // selected User's specific opinion
-    @GetMapping("/opinion/{userid}/{opinionid}")
-    public OpinionResponseDtoDetail selectedOpinionDetail(
-            @PathVariable("userid") Long userid,
-            @PathVariable("opinionid") Long opinionId) {
-        return opinionService.selectedOpinionDetail(userid, opinionId);
+    @GetMapping("/opinion")
+    public OpinionResponseDtoDetail selectedUserOpinionDetail(
+            @RequestParam("opinionId") Long opinionId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return opinionService.selectedUserOpinionDetail(opinionId, userDetails.getUser());
     }
 
     // Update

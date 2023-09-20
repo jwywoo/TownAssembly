@@ -1,9 +1,16 @@
 package com.example.townassembly.domain.post.opinion.service;
 
+import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
+import com.example.townassembly.domain.comment.comment.entity.Comment;
+import com.example.townassembly.domain.comment.comment.repository.CommentRepository;
+import com.example.townassembly.domain.comment.like.entity.CommentLike;
+import com.example.townassembly.domain.comment.like.repository.CommentLikeRepository;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
+import com.example.townassembly.domain.post.like.repository.OpinionLikeRepository;
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoDetail;
+import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoList;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
 import com.example.townassembly.domain.user.entity.User;
@@ -14,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,6 +30,9 @@ import java.util.List;
 public class OpinionService {
     private final OpinionRepository opinionRepository;
     private final UserRepository userRepository;
+    private final OpinionLikeRepository opinionLikeRepository;
+    private final CommentRepository commentRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     public OpinionResponseDto opinionCreate(OpinionRequestDto requestDto, User user) {
 
@@ -38,15 +49,19 @@ public class OpinionService {
                 .toList();
     }
 
-    public List<OpinionResponseDto> selectedOpinionList(Long id) {
+    public List<OpinionResponseDtoList> selectedUserOpinionList(Long id, User user) {
         User selectedUser = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("유효하지 않는 사용자 입니다.")
         );
-        return opinionRepository
-                .findAllByUserOrderByCreatedAt(selectedUser)
-                .stream()
-                .map(OpinionResponseDto::new)
-                .toList();
+        List<Opinion> opinionList = opinionRepository.findAllByUserOrderByCreatedAt(selectedUser);
+        List<OpinionResponseDtoList> opinionResponseDtoList = new ArrayList<>();
+        for (Opinion opinion : opinionList) {
+            log.info(user.getUsername());
+            Integer likeCount = opinionLikeRepository.countAllByOpinion(opinion);
+            Boolean likeStat = opinionLikeRepository.findByUserAndOpinion(user, opinion) != null;
+            opinionResponseDtoList.add(new OpinionResponseDtoList(opinion, likeStat, likeCount));
+        }
+        return opinionResponseDtoList;
     }
 
     public OpinionResponseDto opinionDetail(Long id, User user) {
@@ -62,12 +77,23 @@ public class OpinionService {
         return new OpinionResponseDto(findById(id));
     }
 
-    public OpinionResponseDtoDetail selectedOpinionDetail(Long userid, Long opinionId) {
-        User user = userRepository.findById(userid).orElseThrow(
-                () -> new IllegalArgumentException("유요하지 않는 회원입니다.")
+    public OpinionResponseDtoDetail selectedUserOpinionDetail(Long opinionId, User user) {
+        Opinion selectedOpinion = opinionRepository.findById(opinionId).orElseThrow(
+                () -> new IllegalArgumentException("유효하지 않습니다.")
         );
-        Opinion selectedOpinion = opinionRepository.findByUserAndId(user, opinionId);
-        return new OpinionResponseDtoDetail(selectedOpinion);
+        // Opinion Like
+        Integer likeCount = opinionLikeRepository.countAllByOpinion(selectedOpinion);
+        Boolean likeStat = opinionLikeRepository.findByUserAndOpinion(user, selectedOpinion) != null;
+        // Comment Like
+        List<CommentResponseDto> comments = new ArrayList<>();
+        for (Comment comment: selectedOpinion.getCommentList()) {
+            comments.add(new CommentResponseDto(
+                    comment,
+                    commentLikeRepository.findByUserAndComment(user, comment) != null,
+                    commentLikeRepository.countAllByComment(comment)
+            ));
+        }
+        return new OpinionResponseDtoDetail(selectedOpinion, likeStat, likeCount, comments);
     }
 
     @Transactional
