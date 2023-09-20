@@ -11,4 +11,6 @@ public interface OpinionRepository extends JpaRepository<Opinion, Long> {
     List<Opinion> findAllByUsernameOrderByModifiedAtDesc(String username);
 
     List<Opinion> findAllByUserOrderByCreatedAt(User selectedUser);
+
+    Opinion findByUserAndId(User user, Long opinionId);
 }

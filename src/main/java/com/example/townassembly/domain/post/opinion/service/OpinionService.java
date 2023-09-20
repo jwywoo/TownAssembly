@@ -3,6 +3,7 @@ package com.example.townassembly.domain.post.opinion.service;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
+import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoDetail;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
 import com.example.townassembly.domain.user.entity.User;
@@ -59,6 +60,14 @@ public class OpinionService {
             throw new NullPointerException("유효하지 않은 활동입니다.");
         }
         return new OpinionResponseDto(findById(id));
+    }
+
+    public OpinionResponseDtoDetail selectedOpinionDetail(Long userid, Long opinionId) {
+        User user = userRepository.findById(userid).orElseThrow(
+                () -> new IllegalArgumentException("유요하지 않는 회원입니다.")
+        );
+        Opinion selectedOpinion = opinionRepository.findByUserAndId(user, opinionId);
+        return new OpinionResponseDtoDetail(selectedOpinion);
     }
 
     @Transactional
