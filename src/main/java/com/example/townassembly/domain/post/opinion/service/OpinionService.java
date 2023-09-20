@@ -3,9 +3,11 @@ package com.example.townassembly.domain.post.opinion.service;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
+import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoDetail;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
 import com.example.townassembly.domain.user.entity.User;
+import com.example.townassembly.domain.user.repository.UserRepository;
 import com.example.townassembly.global.dto.StringResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 @Slf4j(topic = "OpinionService")
 public class OpinionService {
     private final OpinionRepository opinionRepository;
+    private final UserRepository userRepository;
 
     public OpinionResponseDto opinionCreate(OpinionRequestDto requestDto, User user) {
 
@@ -35,6 +38,17 @@ public class OpinionService {
                 .toList();
     }
 
+    public List<OpinionResponseDto> selectedOpinionList(Long id) {
+        User selectedUser = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("유효하지 않는 사용자 입니다.")
+        );
+        return opinionRepository
+                .findAllByUserOrderByCreatedAt(selectedUser)
+                .stream()
+                .map(OpinionResponseDto::new)
+                .toList();
+    }
+
     public OpinionResponseDto opinionDetail(Long id, User user) {
         Opinion selectedOpinion = null;
         for (Opinion opinion: user.getOpinionList()) {
@@ -46,6 +60,14 @@ public class OpinionService {
             throw new NullPointerException("유효하지 않은 활동입니다.");
         }
         return new OpinionResponseDto(findById(id));
+    }
+
+    public OpinionResponseDtoDetail selectedOpinionDetail(Long userid, Long opinionId) {
+        User user = userRepository.findById(userid).orElseThrow(
+                () -> new IllegalArgumentException("유요하지 않는 회원입니다.")
+        );
+        Opinion selectedOpinion = opinionRepository.findByUserAndId(user, opinionId);
+        return new OpinionResponseDtoDetail(selectedOpinion);
     }
 
     @Transactional

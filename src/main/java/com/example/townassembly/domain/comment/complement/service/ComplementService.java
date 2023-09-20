@@ -45,6 +45,16 @@ public class ComplementService {
                 .toList();
     }
 
+    public List<ComplementResponseDto> selectedComplementList(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 유저입니다")
+        );
+        return complementRepository.findAllByForWhomOrderByCreatedAt(user)
+                .stream()
+                .map(ComplementResponseDto::new)
+                .toList();
+    }
+
     public ComplementResponseDto complementDetail(Long id, User user) {
         Complement selectedComplement = null;
         for (Complement complement:user.getComplementList()) {

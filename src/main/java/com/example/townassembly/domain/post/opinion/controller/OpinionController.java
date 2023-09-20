@@ -2,6 +2,7 @@ package com.example.townassembly.domain.post.opinion.controller;
 
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
+import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoDetail;
 import com.example.townassembly.domain.post.opinion.service.OpinionService;
 import com.example.townassembly.global.dto.StringResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
@@ -25,14 +26,28 @@ public class OpinionController {
         return opinionService.opinionCreate(requestDto, userDetails.getUser());
     }
     // Read
+    // User's opinionList
     @GetMapping("/opinions")
     public List<OpinionResponseDto> opinionList(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return opinionService.opinionList(userDetails.getUser());
     }
+    // Specific User's opinionList
+    @GetMapping("/opinions/{id}")
+    public List<OpinionResponseDto> selectedOpinionList(@PathVariable Long id) {
+        return opinionService.selectedOpinionList(id);
+    }
 
+    // User's specific opinion
     @GetMapping("/opinion/{id}")
     public OpinionResponseDto opinionDetail(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return opinionService.opinionDetail(id, userDetails.getUser());
+    }
+    // selected User's specific opinion
+    @GetMapping("/opinion/{userid}/{opinionid}")
+    public OpinionResponseDtoDetail selectedOpinionDetail(
+            @PathVariable("userid") Long userid,
+            @PathVariable("opinionid") Long opinionId) {
+        return opinionService.selectedOpinionDetail(userid, opinionId);
     }
 
     // Update

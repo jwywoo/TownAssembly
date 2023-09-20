@@ -25,9 +25,15 @@ public class ComplementController {
         return complementService.complementCreate(id, requestDto, userDetails.getUser());
     }
     // Read
+    // User's complement
     @GetMapping("/complements")
     public List<ComplementResponseDto> complementList(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return complementService.complementList(userDetails.getUser());
+    }
+    // Specific User's complement
+    @GetMapping("/complements/{id}")
+    public List<ComplementResponseDto> selectedComplementList(@PathVariable Long id) {
+        return complementService.selectedComplementList(id);
     }
     @GetMapping("/complement/{id}")
     public ComplementResponseDto complementDetail(@PathVariable Long id,  @AuthenticationPrincipal UserDetailsImpl userDetails){

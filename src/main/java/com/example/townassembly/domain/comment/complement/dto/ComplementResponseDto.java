@@ -6,15 +6,15 @@ import lombok.Getter;
 
 @Getter
 public class ComplementResponseDto {
-    private final Long id;
-    private final String username;
-    private final String title;
-    private final String content;
+    private final Long complementId;
+    private final String complementUsername;
+    private final String complementTitle;
+    private final String complementContent;
 
     public ComplementResponseDto(Complement complement) {
-        this.id = complement.getId();
-        this.title = complement.getTitle();
-        this.content = complement.getContent();
-        this.username = complement.getUsername();
+        this.complementId = complement.getId();
+        this.complementUsername = complement.getTitle();
+        this.complementTitle = complement.getContent();
+        this.complementContent = complement.getUsername();
     }
 }

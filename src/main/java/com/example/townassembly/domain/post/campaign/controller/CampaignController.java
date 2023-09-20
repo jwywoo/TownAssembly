@@ -26,9 +26,15 @@ public class CampaignController {
         return campaignService.campaignCreate(requestDto, userDetails.getUser());
     }
     // Read
+    // User's campaign
     @GetMapping("/campaigns")
     public List<CampaignResponseDto> campaignList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return campaignService.campaignList(userDetails.getUser());
+    }
+    // Other user's campaign
+    @GetMapping("/campaigns/{id}")
+    public List<CampaignResponseDto> selectedCampaignList(@PathVariable Long id) {
+        return campaignService.selectedCampaignList(id);
     }
 
     @GetMapping("/campaign/{id}")
