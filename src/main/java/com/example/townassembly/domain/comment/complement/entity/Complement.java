@@ -19,6 +19,9 @@ public class Complement extends Timestamped {
     @Column(name="username", nullable = false)
     private String username;
 
+    @Column(name = "nickname", nullable = false)
+    private String nickname;
+
     @Column(name ="title", nullable = false)
     private String title;
 
@@ -35,6 +38,7 @@ public class Complement extends Timestamped {
 
     public Complement(ComplementRequestDto requestDto, User user) {
         this.username = user.getUsername();
+        this.nickname = user.getNickname();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }

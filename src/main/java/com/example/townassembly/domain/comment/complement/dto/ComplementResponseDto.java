@@ -7,14 +7,14 @@ import lombok.Getter;
 @Getter
 public class ComplementResponseDto {
     private final Long complementId;
-    private final String complementUsername;
+    private final String complementNickname;
     private final String complementTitle;
     private final String complementContent;
 
     public ComplementResponseDto(Complement complement) {
         this.complementId = complement.getId();
-        this.complementUsername = complement.getTitle();
-        this.complementTitle = complement.getContent();
-        this.complementContent = complement.getUsername();
+        this.complementNickname = complement.getNickname();
+        this.complementTitle = complement.getTitle();
+        this.complementContent = complement.getContent();
     }
 }
