@@ -24,9 +24,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-//    @Column(nullable = false, unique = true)
-//    private String nickName;
-
     @Column(nullable = false)
     private String password;
 
@@ -46,17 +43,32 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
 
+    @Column(nullable = true)
+    private String party;
+
+    @Column(nullable = true)
+    private String location;
+
+    public User(String username, String password, UserRoleEnum role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(String username, String password, UserRoleEnum role, String party, String location) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.party = party;
+        this.location = location;
+    }
+  
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<CommentLike> likedWhat = new ArrayList<>();
 
     //    @Column(nullable = true)
-//    private String email;
-//
-//    @Column(nullable = true)
-//    private String preferredParty;
-//
-//    @Column(nullable = true)
-//    private String district;
+    //    private String email;
+
 
     public User(String username, String password, UserRoleEnum role) {
         this.username = username;

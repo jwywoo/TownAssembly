@@ -1,6 +1,9 @@
 package com.example.townassembly.domain.user.controller;
 
+import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
+import com.example.townassembly.domain.user.entity.User;
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,4 +36,14 @@ public class UserController {
         userService.signup(requestDto);
         return ResponseEntity.ok().body(String.valueOf(HttpStatus.OK.value()));
     }
+
+    @GetMapping("/user/main")
+    public List<AllUsersResponseDto> AllUsersList(UserRoleEnum userRoleEnum) {
+        return userService.AllUsersList(userRoleEnum);
+    }
+
+//    @GetMapping("/user/location")
+//    public List<AllUsersResponseDto> LocationUsersList(User user) {
+//        return userService.LocationUsersList(user);
+//    }
 }

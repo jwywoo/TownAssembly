@@ -11,5 +11,4 @@ public class TownAssemblyApplication {
     public static void main(String[] args) {
         SpringApplication.run(TownAssemblyApplication.class, args);
     }
-
 }

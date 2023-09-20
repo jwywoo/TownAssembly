@@ -1,5 +1,8 @@
 package com.example.townassembly.domain.user.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum UserRoleEnum {
     USER(Authority.USER),  // 정치인 유저 권한
     voterUser(Authority.voterUser), // 유권자 유저 권한
