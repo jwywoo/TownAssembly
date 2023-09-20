@@ -2,6 +2,7 @@ package com.example.townassembly.domain.comment.comment.controller;
 
 import com.example.townassembly.domain.comment.comment.dto.CommentRequestDto;
 import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
+import com.example.townassembly.domain.comment.comment.dto.CommentResponseDtoList;
 import com.example.townassembly.domain.comment.comment.service.CommentService;
 import com.example.townassembly.global.dto.StringResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
@@ -26,7 +27,7 @@ public class CommentController {
     }
     // Read
     @GetMapping("/comments")
-    public List<CommentResponseDto> commentList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<CommentResponseDtoList> commentList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         // by user
         String username = "test";
         return commentService.commentList(userDetails.getUser());
@@ -38,7 +39,7 @@ public class CommentController {
 
     // Update
     @PutMapping("/comment/{id}")
-    public CommentResponseDto commentUpdate(@PathVariable Long id, @RequestBody CommentRequestDto requestDto,  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public CommentResponseDtoList commentUpdate(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.commentUpdate(id, requestDto, userDetails.getUser());
     }
     // Delete

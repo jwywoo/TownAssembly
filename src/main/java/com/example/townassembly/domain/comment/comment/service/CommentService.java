@@ -3,6 +3,7 @@ package com.example.townassembly.domain.comment.comment.service;
 
 import com.example.townassembly.domain.comment.comment.dto.CommentRequestDto;
 import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
+import com.example.townassembly.domain.comment.comment.dto.CommentResponseDtoList;
 import com.example.townassembly.domain.comment.comment.entity.Comment;
 import com.example.townassembly.domain.comment.comment.repository.CommentRepository;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
@@ -29,15 +30,12 @@ public class CommentService {
         Comment newComment = new Comment(requestDto, user);
         user.commentAdd(newComment);
         opinion.commentAdd(newComment);
-        return new CommentResponseDto(commentRepository.save(newComment));
+        return new CommentResponseDto(commentRepository.save(newComment), false, 0);
     }
 
-    public List<CommentResponseDto> commentList(User user) {
-        return this.commentRepository
-                .findAllByUsernameOrderByModifiedAtDesc(user.getUsername())
-                .stream()
-                .map(CommentResponseDto::new)
-                .toList();
+    public List<CommentResponseDtoList> commentList(User user) {
+        return commentRepository
+                .findAllByUsernameOrderByModifiedAtDesc(user.getUsername()).stream().map(CommentResponseDtoList::new).toList();
     }
 
     public CommentResponseDto commentDetail(Long id, User user) {
@@ -46,18 +44,18 @@ public class CommentService {
             if (id.equals(comment.getId())) selectedComment = comment;
         }
         if (selectedComment == null) throw new IllegalArgumentException("유효하지 않은 댓글입니다.");
-        return new CommentResponseDto(selectedComment);
+        return new CommentResponseDto(selectedComment, false, 0);
     }
 
     @Transactional
-    public CommentResponseDto commentUpdate(Long id, CommentRequestDto requestDto, User user) {
+    public CommentResponseDtoList commentUpdate(Long id, CommentRequestDto requestDto, User user) {
         Comment comment = findById(id);
         if (user.getUsername().equals(comment.getUsername())) {
             comment.update(requestDto);
         } else {
             throw new IllegalArgumentException("수정할 수 없습니다.");
         }
-        return new CommentResponseDto(comment);
+        return new CommentResponseDtoList(comment);
     }
 
     public StringResponseDto commentDelete(Long id, User user) {
