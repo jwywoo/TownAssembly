@@ -21,7 +21,7 @@ public class OpinionLike {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "opinion_id")
     private Opinion opinion;
 
     public void setUser(User user) {

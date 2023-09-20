@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OpinionLikeRepository extends JpaRepository<OpinionLike, Long> {
     OpinionLike findByUserAndOpinion(User user, Opinion opinion);
+    Integer countAllByOpinion(Opinion opinion);
 }

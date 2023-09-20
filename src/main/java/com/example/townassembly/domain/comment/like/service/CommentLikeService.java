@@ -19,12 +19,8 @@ public class CommentLikeService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void commentLike(CommentLikeRequestDto requestDto) {
-        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("유효하지 않은 계정입니다.")
-        );
-
-        Comment comment = commentRepository.findById(requestDto.getCommentId()).orElseThrow(
+    public void commentLike(Long id, User user) {
+        Comment comment = commentRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("유효하지 않은 댓글입니다.")
         );
 

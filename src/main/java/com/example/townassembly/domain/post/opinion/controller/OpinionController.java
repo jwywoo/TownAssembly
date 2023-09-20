@@ -3,6 +3,7 @@ package com.example.townassembly.domain.post.opinion.controller;
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoDetail;
+import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoList;
 import com.example.townassembly.domain.post.opinion.service.OpinionService;
 import com.example.townassembly.global.dto.StringResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
@@ -33,8 +34,8 @@ public class OpinionController {
     }
     // Specific User's opinionList
     @GetMapping("/opinions/{id}")
-    public List<OpinionResponseDto> selectedOpinionList(@PathVariable Long id) {
-        return opinionService.selectedOpinionList(id);
+    public List<OpinionResponseDtoList> selectedOpinionList(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return opinionService.selectedOpinionList(id, userDetails.getUser());
     }
 
     // User's specific opinion

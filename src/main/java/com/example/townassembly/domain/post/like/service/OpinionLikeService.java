@@ -18,13 +18,10 @@ public class OpinionLikeService {
     private final UserRepository userRepository;
     private final OpinionRepository opinionRepository;
     @Transactional
-    public void opinionLike(OpinionLikeRequestDto requestDto) {
-        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("유요하지 않은 계정입니다."));
-        Opinion opinion = opinionRepository.findById(requestDto.getOpinionId()) .orElseThrow(
+    public void opinionLike(Long id, User user) {
+        Opinion opinion = opinionRepository.findById(id) .orElseThrow(
                 () -> new IllegalArgumentException("유요하지 않은 정보입니다.")
         );
-
         OpinionLike opinionLike = opinionLikeRepository.findByUserAndOpinion(user, opinion);
 
         if (opinionLike == null) {
