@@ -42,7 +42,7 @@ public class OpinionService {
                 .toList();
     }
 
-    public List<OpinionResponseDtoList> selectedOpinionList(Long id, User user) {
+    public List<OpinionResponseDtoList> selectedUserOpinionList(Long id, User user) {
         User selectedUser = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("유효하지 않는 사용자 입니다.")
         );
@@ -70,12 +70,13 @@ public class OpinionService {
         return new OpinionResponseDto(findById(id));
     }
 
-    public OpinionResponseDtoDetail selectedOpinionDetail(Long userid, Long opinionId) {
-        User user = userRepository.findById(userid).orElseThrow(
-                () -> new IllegalArgumentException("유요하지 않는 회원입니다.")
+    public OpinionResponseDtoDetail selectedUserOpinionDetail(Long opinionId, User user) {
+        Opinion selectedOpinion = opinionRepository.findById(opinionId).orElseThrow(
+                () -> new IllegalArgumentException("유효하지 않습니다.")
         );
-        Opinion selectedOpinion = opinionRepository.findByUserAndId(user, opinionId);
-        return new OpinionResponseDtoDetail(selectedOpinion);
+        Integer likeCount = opinionLikeRepository.countAllByOpinion(selectedOpinion);
+        Boolean likeStat = opinionLikeRepository.findByUserAndOpinion(user, selectedOpinion) != null;
+        return new OpinionResponseDtoDetail(selectedOpinion, likeStat, likeCount);
     }
 
     @Transactional
