@@ -43,22 +43,24 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
     @Column(nullable = true)
     private String party;
 
     @Column(nullable = true)
     private String location;
 
-    public User(String username, String password, UserRoleEnum role) {
+    public User(String username, String password, UserRoleEnum role, String nickname, String email, String party, String location) {
         this.username = username;
         this.password = password;
         this.role = role;
-    }
-
-    public User(String username, String password, UserRoleEnum role, String party, String location) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
+        this.nickname = nickname;
+        this.email = email;
         this.party = party;
         this.location = location;
     }
@@ -66,15 +68,12 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<CommentLike> likedWhat = new ArrayList<>();
 
-    //    @Column(nullable = true)
-    //    private String email;
-
-
-    public User(String username, String password, UserRoleEnum role) {
+    public User(String username, String password, UserRoleEnum role, String nickname, String email) {
         this.username = username;
         this.password = password;
         this.role = role;
-//        this.nickName = nickName;
+        this.nickname = nickname;
+        this.email = email;
     }
 
     public void commentAdd(Comment comment) {
