@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 public class AllUsersResponseDto {
-    private final String username;
+    private final String nickname;
     private final String party;
     private final String location;
     private final String opinionTitle;
 
     public AllUsersResponseDto(User user, Opinion opinion) {
-        this.username = user.getUsername();
+        this.nickname = user.getNickname();
         this.party = user.getParty();
         this.location = user.getLocation();
         this.opinionTitle = opinion.getTitle();
