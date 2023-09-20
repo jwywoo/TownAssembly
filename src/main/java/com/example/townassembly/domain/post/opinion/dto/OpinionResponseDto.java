@@ -9,17 +9,17 @@ import java.util.List;
 
 @Getter
 public class OpinionResponseDto {
-    private final Long id;
-    private final String title;
-    private final String content;
-    private final String username;
+    private final Long opinionId;
+    private final String opinionTitle;
+    private final String opinionContent;
+    private final String opinionUsername;
     private List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
     public OpinionResponseDto(Opinion opinion) {
-        this.id = opinion.getId();
-        this.title = opinion.getTitle();
-        this.content = opinion.getContent();
-        this.username = opinion.getUsername();
+        this.opinionId = opinion.getId();
+        this.opinionTitle = opinion.getTitle();
+        this.opinionContent = opinion.getContent();
+        this.opinionUsername = opinion.getUsername();
         this.commentResponseDtoList = opinion.getCommentList().stream().map(CommentResponseDto::new).toList();
     }
 }
