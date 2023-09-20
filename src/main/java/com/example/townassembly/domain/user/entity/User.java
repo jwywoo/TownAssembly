@@ -5,6 +5,7 @@ import com.example.townassembly.domain.comment.complement.entity.Complement;
 import com.example.townassembly.domain.comment.like.entity.CommentLike;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
+import com.example.townassembly.domain.user.follow.entity.Follow;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Follow> followList = new ArrayList<>();
 
     @Column(nullable = false, unique = true)
     private String email;

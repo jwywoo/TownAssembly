@@ -6,6 +6,7 @@ import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
+import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final OpinionRepository opinionRepository;
+    private final FollowRepository followRepository;
 
     private User user;
 
@@ -99,7 +101,43 @@ public class UserService {
         return userResponseDtos;
     }
 
-//    public List<AllUsersResponseDto> LocationUsersList(User user) {
+    public List<AllUsersResponseDto> LocationUsersList(String location) {
+        // 해당 위치 정보를 가진 모든 사용자를 가져옵니다.
+        List<User> usersLocation = userRepository.findByLocation(location);
+
+        // 사용자 정보와 해당 사용자의 최신 의견 정보를 가져옵니다.
+        List<AllUsersResponseDto> usersLocationDtos = new ArrayList<>();
+
+        for (User user : usersLocation) {
+            // 각 사용자의 최신 의견을 가져옵니다.
+            Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(user.getId());
+
+            // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
+            usersLocationDtos.add(new AllUsersResponseDto(user, latestOpinion));
+        }
+        return usersLocationDtos;
+    }
+
+    public List<AllUsersResponseDto> PartyUsersList(String party) {
+        // 해당 정당 정보를 가진 모든 사용자를 가져옵니다.
+        List<User> usersParty = userRepository.findByParty(party);
+
+        // 사용자 정보와 해당 사용자의 최신 의견 정보를 가져옵니다.
+        List<AllUsersResponseDto> usersPartyDtos = new ArrayList<>();
+
+        for (User user : usersParty) {
+            // 각 사용자의 최신 의견을 가져옵니다.
+            Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(user.getId());
+
+            // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
+            usersPartyDtos.add(new AllUsersResponseDto(user, latestOpinion));
+        }
+        return usersPartyDtos;
+    }
+
+//    public List<AllUsersResponseDto> FollowUsersList(String follow) {
+//
+//        List<User> usersFollow = followRepository.findBy
 //
 //    }
 }
