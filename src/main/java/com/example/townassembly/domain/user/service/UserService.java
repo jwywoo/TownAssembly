@@ -6,6 +6,7 @@ import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
+import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final OpinionRepository opinionRepository;
+    private final FollowRepository followRepository;
 
     private User user;
 
@@ -132,4 +134,10 @@ public class UserService {
         }
         return usersPartyDtos;
     }
+
+//    public List<AllUsersResponseDto> FollowUsersList(String follow) {
+//
+//        List<User> usersFollow = followRepository.findBy
+//
+//    }
 }
