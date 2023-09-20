@@ -1,5 +1,10 @@
 package com.example.townassembly.domain.post.opinion.service;
 
+import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
+import com.example.townassembly.domain.comment.comment.entity.Comment;
+import com.example.townassembly.domain.comment.comment.repository.CommentRepository;
+import com.example.townassembly.domain.comment.like.entity.CommentLike;
+import com.example.townassembly.domain.comment.like.repository.CommentLikeRepository;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.like.repository.OpinionLikeRepository;
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
@@ -26,6 +31,8 @@ public class OpinionService {
     private final OpinionRepository opinionRepository;
     private final UserRepository userRepository;
     private final OpinionLikeRepository opinionLikeRepository;
+    private final CommentRepository commentRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     public OpinionResponseDto opinionCreate(OpinionRequestDto requestDto, User user) {
 
@@ -74,9 +81,19 @@ public class OpinionService {
         Opinion selectedOpinion = opinionRepository.findById(opinionId).orElseThrow(
                 () -> new IllegalArgumentException("유효하지 않습니다.")
         );
+        // Opinion Like
         Integer likeCount = opinionLikeRepository.countAllByOpinion(selectedOpinion);
         Boolean likeStat = opinionLikeRepository.findByUserAndOpinion(user, selectedOpinion) != null;
-        return new OpinionResponseDtoDetail(selectedOpinion, likeStat, likeCount);
+        // Comment Like
+        List<CommentResponseDto> comments = new ArrayList<>();
+        for (Comment comment: selectedOpinion.getCommentList()) {
+            comments.add(new CommentResponseDto(
+                    comment,
+                    commentLikeRepository.findByUserAndComment(user, comment) != null,
+                    commentLikeRepository.countAllByComment(comment)
+            ));
+        }
+        return new OpinionResponseDtoDetail(selectedOpinion, likeStat, likeCount, comments);
     }
 
     @Transactional
