@@ -1,16 +1,17 @@
-package com.example.townassembly.domain.comment.like.entity;
+package com.example.townassembly.domain.post.like.entity;
 
-import com.example.townassembly.domain.comment.comment.entity.Comment;
+import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Getter
+@Table(name = "opinionlike")
 @NoArgsConstructor
-@Table(name = "commentlike")
-public class CommentLike {
+public class OpinionLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,12 +22,12 @@ public class CommentLike {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
-    private Comment comment;
+    private Opinion opinion;
 
     public void setUser(User user) {
         this.user = user;
     }
-    public void setComment(Comment comment) {
-        this.comment = comment;
+    public void setOpinion(Opinion opinion) {
+        this.opinion = opinion;
     }
 }

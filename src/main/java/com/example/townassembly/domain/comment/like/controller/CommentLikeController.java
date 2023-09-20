@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j(topic = "Comment Like")
 public class CommentLikeController {
     private final CommentLikeService commentLikeService;
-    @PostMapping("/comment/like/")
+    @PostMapping("/comment/like")
     public void commentLike(@RequestBody CommentLikeRequestDto requestDto) {
         commentLikeService.commentLike(requestDto);
     }

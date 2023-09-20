@@ -34,10 +34,8 @@ public class CommentLikeService {
             commentLike = new CommentLike();
             commentLike.setComment(comment);
             commentLike.setUser(user);
-            comment.increaseCnt();
             commentLikeRepository.save(commentLike);
         } else {
-            comment.decreaseCnt();
             commentLikeRepository.delete(commentLike);
         }
     }
