@@ -2,6 +2,7 @@ package com.example.townassembly.domain.user.entity;
 
 import com.example.townassembly.domain.comment.comment.entity.Comment;
 import com.example.townassembly.domain.comment.complement.entity.Complement;
+import com.example.townassembly.domain.comment.like.entity.CommentLike;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import jakarta.persistence.*;
@@ -30,20 +31,17 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Opinion> opinionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Campaign> campaignList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
-
-//  @Column(nullable = true)
-//  private String email;
 
     @Column(nullable = true)
     private String party;
@@ -64,19 +62,37 @@ public class User {
         this.party = party;
         this.location = location;
     }
+  
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<CommentLike> likedWhat = new ArrayList<>();
+
+    //    @Column(nullable = true)
+    //    private String email;
+
+
+    public User(String username, String password, UserRoleEnum role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+//        this.nickName = nickName;
+    }
 
     public void commentAdd(Comment comment) {
         this.commentList.add(comment);
         comment.setUser(this);
     }
-    public void complementAdd(Complement complement) {
+
+    public void complementAdd(Complement complement, User forWhom) {
         this.complementList.add(complement);
         complement.setUser(this);
+        complement.setForWhom(forWhom);
     }
+
     public void campaignAdd(Campaign campaign) {
         this.campaignList.add(campaign);
         campaign.setUser(this);
     }
+
     public void opinionAdd(Opinion opinion) {
         this.opinionList.add(opinion);
         opinion.setUser(this);

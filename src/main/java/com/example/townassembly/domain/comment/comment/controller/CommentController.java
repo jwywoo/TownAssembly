@@ -4,8 +4,10 @@ import com.example.townassembly.domain.comment.comment.dto.CommentRequestDto;
 import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
 import com.example.townassembly.domain.comment.comment.service.CommentService;
 import com.example.townassembly.global.dto.StringResponseDto;
+import com.example.townassembly.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,30 +21,30 @@ public class CommentController {
 
     // Create
     @PostMapping("/comment/{id}")
-    public CommentResponseDto commentCreate(@PathVariable Long id, @RequestBody CommentRequestDto requestDto) {
-        return commentService.commentCreate(requestDto, id);
+    public CommentResponseDto commentCreate(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.commentCreate(requestDto, id, userDetails.getUser());
     }
     // Read
     @GetMapping("/comments")
-    public List<CommentResponseDto> commentList() {
+    public List<CommentResponseDto> commentList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         // by user
         String username = "test";
-        return commentService.commentList(username);
+        return commentService.commentList(userDetails.getUser());
     }
     @GetMapping("/comment/{id}")
-    public CommentResponseDto commentDetail(@PathVariable Long id) {
-        return commentService.commentDetail(id);
+    public CommentResponseDto commentDetail(@PathVariable Long id,  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.commentDetail(id, userDetails.getUser());
     }
 
     // Update
     @PutMapping("/comment/{id}")
-    public CommentResponseDto commentUpdate(@PathVariable Long id, @RequestBody CommentRequestDto requestDto) {
-        return commentService.commentUpdate(id, requestDto);
+    public CommentResponseDto commentUpdate(@PathVariable Long id, @RequestBody CommentRequestDto requestDto,  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.commentUpdate(id, requestDto, userDetails.getUser());
     }
     // Delete
     @DeleteMapping("/comment/{id}")
-    public StringResponseDto stringResponseDto(@PathVariable Long id) {
-        return commentService.commentDelete(id);
+    public StringResponseDto stringResponseDto(@PathVariable Long id,  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.commentDelete(id, userDetails.getUser());
     }
 
 }

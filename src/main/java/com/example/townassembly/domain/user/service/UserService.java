@@ -37,6 +37,7 @@ public class UserService {
         String passwordConfirm = requestDto.getPasswordConfirm();
         String party = requestDto.getParty();
         String location = requestDto.getLocation();
+        String nickname = requestDto.getNickname();
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
@@ -44,7 +45,6 @@ public class UserService {
             return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 사용자가 존재합니다.");
         }
 
-//        // Nickname 중복확인
 //        Optional<User> checkNickname = userRepository.findByNickName(nickname);
 //        if (checkNickname.isPresent()) {
 //            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 활동명이 존재합니다.");
