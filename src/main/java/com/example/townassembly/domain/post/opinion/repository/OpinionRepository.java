@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface OpinionRepository extends JpaRepository<Opinion, Long> {
     List<Opinion> findAllByUsernameOrderByModifiedAtDesc(String username);
+    Opinion findLatestOpinionByUserId(Long id);
+
 }

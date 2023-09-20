@@ -23,9 +23,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, unique = true)
-    private String nickName;
-
     @Column(nullable = false)
     private String password;
 
@@ -45,20 +42,27 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Complement> complementList = new ArrayList<>();
 
-    //    @Column(nullable = true)
-//    private String email;
-//
-//    @Column(nullable = true)
-//    private String preferredParty;
-//
-//    @Column(nullable = true)
-//    private String district;
+//  @Column(nullable = true)
+//  private String email;
 
-    public User(String username, String password, String nickName, UserRoleEnum role) {
+    @Column(nullable = true)
+    private String party;
+
+    @Column(nullable = true)
+    private String location;
+
+    public User(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.nickName = nickName;
+    }
+
+    public User(String username, String password, UserRoleEnum role, String party, String location) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.party = party;
+        this.location = location;
     }
 
     public void commentAdd(Comment comment) {
@@ -70,8 +74,8 @@ public class User {
         complement.setUser(this);
     }
     public void campaignAdd(Campaign campaign) {
-            this.campaignList.add(campaign);
-            campaign.setUser(this);
+        this.campaignList.add(campaign);
+        campaign.setUser(this);
     }
     public void opinionAdd(Opinion opinion) {
         this.opinionList.add(opinion);
