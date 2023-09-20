@@ -34,10 +34,10 @@ public class UserService {
     public ResponseEntity<String> signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
-        String passwordConfirm = requestDto.getPasswordConfirm();
+        String nickname = requestDto.getNickname();
+        String email = requestDto.getEmail();
         String party = requestDto.getParty();
         String location = requestDto.getLocation();
-        String nickname = requestDto.getNickname();
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
@@ -45,18 +45,22 @@ public class UserService {
             return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 사용자가 존재합니다.");
         }
 
-//        Optional<User> checkNickname = userRepository.findByNickName(nickname);
-//        if (checkNickname.isPresent()) {
-//            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 활동명이 존재합니다.");
-//        }
-
-        // 비밀번호 확인
-        if(!requestDto.getPassword().equals(requestDto.getPasswordConfirm())) {
-            throw new IllegalArgumentException("비밀번호가 다릅니다.");
+        // 활동명 중복 확인
+        Optional<User> checkNickname = userRepository.findByNickname(nickname);
+        if (checkNickname.isPresent()) {
+            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 활동명이 존재합니다.");
         }
 
-        // 사용자 ROLE 확인
+        // 이메일 중복 확인
+        Optional<User> checkEmail = userRepository.findByEmail(email);
+        if (checkEmail.isPresent()) {
+            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 이메일이 존재합니다.");
+        }
+
+        // 기본으로 정치인 유저로 ROLE 등록
         UserRoleEnum role = UserRoleEnum.USER;
+
+        // 관리자 ROLE 확인
         if (requestDto.isAdmin()) {
             if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
                 throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
@@ -64,20 +68,16 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        // 사용자가 유권자인지 확인
-        if(requestDto.isVoterUser()) {
-            role = UserRoleEnum.voterUser;
-        }
-
-        // 정당이나 지역이 입력되어 있지 않으면 아이디와 비밀번호, 역할만 받고 그대로 회원가입
+        // 정당이나 지역이 입력되어 있지 않으면 아이디와 비밀번호, 역할, 활동명만 입력받고 유권자 유저로 회원가입
         if(party.isEmpty() || location.isEmpty()) {
-            User user = new User(username, password, role);
+            role = UserRoleEnum.voterUser;
+            User user = new User(username, password, role, nickname, email);
             userRepository.save(user);
             return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
         }
 
         // 사용자 등록
-        User user = new User(username, password, role, party, location);
+        User user = new User(username, password, role, nickname, email, party, location);
         userRepository.save(user);
         return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
     }
