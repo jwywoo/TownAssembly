@@ -12,7 +12,7 @@ public class OpinionResponseDtoDetail {
     private final Long opinionId;
     private final String opinionTitle;
     private final String opinionContent;
-    private final String opinionUsername;
+    private final String opinionNickname;
     private final List<CommentResponseDto> commentResponseDtoList;
     // Like Status, Like Count need
     private final Boolean likeStat;
@@ -22,7 +22,7 @@ public class OpinionResponseDtoDetail {
         this.opinionId = opinion.getId();
         this.opinionTitle = opinion.getTitle();
         this.opinionContent = opinion.getContent();
-        this.opinionUsername = opinion.getUsername();
+        this.opinionNickname = opinion.getNickname();
         this.commentResponseDtoList = comments;
         this.likeStat = likeStat;
         this.likeCount = likeCount;
