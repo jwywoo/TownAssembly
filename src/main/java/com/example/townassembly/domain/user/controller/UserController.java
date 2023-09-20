@@ -42,8 +42,8 @@ public class UserController {
         return userService.AllUsersList(userRoleEnum);
     }
 
-    @GetMapping("/user/location")
-    public List<AllUsersResponseDto> LocationUsersList(User user) {
-        return userService.LocationUsersList(user);
-    }
+//    @GetMapping("/user/location")
+//    public List<AllUsersResponseDto> LocationUsersList(User user) {
+//        return userService.LocationUsersList(user);
+//    }
 }
