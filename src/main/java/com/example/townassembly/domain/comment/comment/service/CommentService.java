@@ -13,6 +13,8 @@ import com.example.townassembly.global.dto.StringResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,6 +68,7 @@ public class CommentService {
             throw new IllegalArgumentException("삭제할 수 없습니다.");
         }
         return new StringResponseDto("삭제성공", "200");
+//        return "삭제성공";
     }
 
     private Opinion findByIdOpinion(Long id) {
