@@ -19,6 +19,11 @@ public class FollowService {
         User forWhom = userRepository.findById(followRequestDto.getUserId()).orElseThrow(
                 () -> new IllegalArgumentException("유효하지 않은 계정입니다."));
 
+//        // 스스로를 팔로우할 수 없도록 확인합니다.
+//        if (user.equals(forWhom)) {
+//            throw new IllegalArgumentException("스스로를 팔로우 할 수 없습니다.");
+//        }
+
         Follow follow = followRepository.findByUserAndForWhom(user, forWhom);
 
         if (follow == null) {

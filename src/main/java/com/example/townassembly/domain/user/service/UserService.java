@@ -6,6 +6,7 @@ import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
+import com.example.townassembly.domain.user.follow.entity.Follow;
 import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -112,6 +113,11 @@ public class UserService {
             // 각 사용자의 최신 의견을 가져옵니다.
             Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(user.getId());
 
+            // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
+            if (latestOpinion == null) {
+                latestOpinion = new Opinion(); // 빈 객체 생성 또는 기본 값을 사용할 수 있음
+            }
+
             // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
             usersLocationDtos.add(new AllUsersResponseDto(user, latestOpinion));
         }
@@ -129,15 +135,38 @@ public class UserService {
             // 각 사용자의 최신 의견을 가져옵니다.
             Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(user.getId());
 
+            // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
+            if (latestOpinion == null) {
+                latestOpinion = new Opinion(); // 빈 객체 생성 또는 기본 값을 사용할 수 있음
+            }
+
             // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
             usersPartyDtos.add(new AllUsersResponseDto(user, latestOpinion));
         }
         return usersPartyDtos;
     }
 
-//    public List<AllUsersResponseDto> FollowUsersList(String follow) {
-//
-//        List<User> usersFollow = followRepository.findBy
-//
-//    }
+    public List<AllUsersResponseDto> FollowingUsersList(User user) {
+        // 로그인한 유저가 팔로우한 사람들의 목록을 가져옵니다.
+        List<Follow> followingList = followRepository.findByUser(user);
+
+        // 팔로우한 사용자 목록을 저장할 리스트를 초기화합니다.
+        List<AllUsersResponseDto> followingUserDtos = new ArrayList<>();
+
+        for (Follow follow : followingList) {
+            User followingUser = follow.getForWhom();
+
+            // 각 팔로우한 사용자의 최신 의견을 가져옵니다.
+            Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(followingUser.getId());
+
+            // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
+            if (latestOpinion == null) {
+                latestOpinion = new Opinion(); // 빈 객체 생성 또는 기본 값을 사용할 수 있음
+            }
+
+            // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
+            followingUserDtos.add(new AllUsersResponseDto(followingUser, latestOpinion));
+        }
+        return followingUserDtos;
+    }
 }
