@@ -10,6 +10,7 @@ import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.follow.entity.Follow;
 import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
+import com.example.townassembly.global.dto.JsonResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,19 +46,19 @@ public class UserService {
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
-            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 사용자가 존재합니다.");
+            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
         // 활동명 중복 확인
         Optional<User> checkNickname = userRepository.findByNickname(nickname);
         if (checkNickname.isPresent()) {
-            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 활동명이 존재합니다.");
+            throw new IllegalArgumentException("중복된 활동명이 존재합니다.");
         }
 
         // 이메일 중복 확인
         Optional<User> checkEmail = userRepository.findByEmail(email);
         if (checkEmail.isPresent()) {
-            return ResponseEntity.status(400).body("상태코드 : " + HttpStatus.BAD_REQUEST.value() + ", 메세지 : 중복된 이메일이 존재합니다.");
+            throw new IllegalArgumentException("중복된 이메일이 존재합니다.");
         }
 
         // 기본으로 정치인 유저로 ROLE 등록
@@ -78,6 +78,7 @@ public class UserService {
             User user = new User(username, password, role, nickname, email);
             userRepository.save(user);
             return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
+
         }
 
         // 사용자 등록
@@ -97,13 +98,18 @@ public class UserService {
             // 각 사용자의 최신 의견을 가져옵니다.
             Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(user.getId());
 
+            // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
+            if (latestOpinion == null) {
+                latestOpinion = new Opinion(); // 빈 객체 생성 또는 기본 값을 사용할 수 있음
+            }
+
             // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
             userResponseDtos.add(new AllUsersResponseDto(user, latestOpinion));
         }
         return userResponseDtos;
     }
 
-    public List<AllUsersResponseDto> LocationUsersList(String location) {
+    public ResponseEntity<JsonResponseDto> LocationUsersList(String location) {
         // 해당 위치 정보를 가진 모든 사용자를 가져옵니다.
         List<User> usersLocation = userRepository.findByLocation(location);
 
@@ -122,10 +128,10 @@ public class UserService {
             // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
             usersLocationDtos.add(new AllUsersResponseDto(user, latestOpinion));
         }
-        return usersLocationDtos;
+        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), usersLocationDtos));
     }
 
-    public List<AllUsersResponseDto> PartyUsersList(String party) {
+    public ResponseEntity<JsonResponseDto> PartyUsersList(String party) {
         // 해당 정당 정보를 가진 모든 사용자를 가져옵니다.
         List<User> usersParty = userRepository.findByParty(party);
 
@@ -144,7 +150,7 @@ public class UserService {
             // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
             usersPartyDtos.add(new AllUsersResponseDto(user, latestOpinion));
         }
-        return usersPartyDtos;
+        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), usersPartyDtos));
     }
 
     public List<AllUsersResponseDto> FollowingUsersList(User user) {
@@ -171,7 +177,7 @@ public class UserService {
         return followingUserDtos;
     }
 
-    public List<UserInfoResponseDto> UserInfoList(User user) {
+    public ResponseEntity<List<UserInfoResponseDto>> UserInfoList(User user) {
         List<UserInfoResponseDto> userInfoList = new ArrayList<>();
 
         // 로그인한 유저의 정보를 가져옵니다.
@@ -183,6 +189,6 @@ public class UserService {
             userInfoList.add(userInfoResponseDto);
         });
 
-        return userInfoList;
+        return ResponseEntity.ok().body(userInfoList);
     }
 }

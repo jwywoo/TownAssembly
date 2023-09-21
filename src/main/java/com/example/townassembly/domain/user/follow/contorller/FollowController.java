@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j(topic = "Follow")
 public class FollowController {
     private final FollowService followService;
+
     @PostMapping("/user/follow")
     public void followCreate(@RequestBody FollowRequestDto followRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         followService.followCreate(followRequestDto, userDetails.getUser());
