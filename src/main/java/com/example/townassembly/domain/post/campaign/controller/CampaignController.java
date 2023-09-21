@@ -4,10 +4,13 @@ package com.example.townassembly.domain.post.campaign.controller;
 import com.example.townassembly.domain.post.campaign.dto.CampaignRequestDto;
 import com.example.townassembly.domain.post.campaign.dto.CampaignResponseDto;
 import com.example.townassembly.domain.post.campaign.service.CampaignService;
+import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.dto.StringResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,36 +25,54 @@ public class CampaignController {
 
     // Create
     @PostMapping("/campaign")
-    public CampaignResponseDto campaignCreate(@RequestBody CampaignRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return campaignService.campaignCreate(requestDto, userDetails.getUser());
+    public ResponseEntity<JsonResponseDto> campaignCreate(@RequestBody CampaignRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(new JsonResponseDto(
+                HttpStatus.OK.value(),
+                campaignService.campaignCreate(requestDto, userDetails.getUser())
+        ));
     }
     // Read
     // User's campaign
     @GetMapping("/campaigns")
-    public List<CampaignResponseDto> campaignList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return campaignService.campaignList(userDetails.getUser());
+    public ResponseEntity<JsonResponseDto> campaignList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(new JsonResponseDto(
+                HttpStatus.OK.value(),
+                campaignService.campaignList(userDetails.getUser())
+                ));
     }
-    // Other user's campaign
+    // Selected User's campaign
     @GetMapping("/campaigns/{id}")
-    public List<CampaignResponseDto> selectedCampaignList(@PathVariable Long id) {
-        return campaignService.selectedCampaignList(id);
+    public ResponseEntity<JsonResponseDto> selectedCampaignList(@PathVariable Long id) {
+        return ResponseEntity.ok(new JsonResponseDto(
+                HttpStatus.OK.value(),
+                campaignService.selectedCampaignList(id)
+                ));
     }
 
     @GetMapping("/campaign/{id}")
-    public CampaignResponseDto campaignDetail(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return campaignService.campaignDetail(id, userDetails.getUser());
+    public ResponseEntity<JsonResponseDto> campaignDetail(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(new JsonResponseDto(
+                HttpStatus.OK.value(),
+                campaignService.campaignDetail(id, userDetails.getUser())
+                ));
     }
 
     // Update
     @PutMapping("/campaign/{id}")
-    public CampaignResponseDto campaignUpdate(@PathVariable Long id,@RequestBody CampaignRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<JsonResponseDto> campaignUpdate(@PathVariable Long id,@RequestBody CampaignRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info(requestDto.getContent());
-        return campaignService.campaignUpdate(id, requestDto, userDetails.getUser());
+        return ResponseEntity.ok(new JsonResponseDto(
+                HttpStatus.OK.value(),
+                campaignService.campaignUpdate(id, requestDto, userDetails.getUser())
+                ));
     }
 
     // Delete
     @DeleteMapping("/campaign/{id}")
-    public StringResponseDto campaignDelete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return campaignService.campaignDelete(id, userDetails.getUser());
+    public ResponseEntity<JsonResponseDto> campaignDelete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(new JsonResponseDto(
+                HttpStatus.OK.value(),
+                campaignService.campaignDelete(id, userDetails.getUser())
+                ));
     }
 }

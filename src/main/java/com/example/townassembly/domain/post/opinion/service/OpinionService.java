@@ -64,19 +64,6 @@ public class OpinionService {
         return opinionResponseDtoList;
     }
 
-    public OpinionResponseDto opinionDetail(Long id, User user) {
-        Opinion selectedOpinion = null;
-        for (Opinion opinion: user.getOpinionList()) {
-            if (id.equals(opinion.getId())) {
-                selectedOpinion = opinion;
-            }
-        }
-        if (selectedOpinion == null) {
-            throw new NullPointerException("유효하지 않은 활동입니다.");
-        }
-        return new OpinionResponseDto(findById(id));
-    }
-
     public OpinionResponseDtoDetail selectedUserOpinionDetail(Long opinionId, User user) {
         Opinion selectedOpinion = opinionRepository.findById(opinionId).orElseThrow(
                 () -> new IllegalArgumentException("유효하지 않습니다.")

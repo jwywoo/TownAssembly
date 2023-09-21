@@ -25,6 +25,9 @@ public class Campaign extends Timestamped {
     @Column(name = "url", nullable = false)
     private String url;
 
+    @Column(name="nickname", nullable = false)
+    private String nickname;
+
     @Column(name = "username", nullable = false)
     private String username;
 
@@ -41,6 +44,7 @@ public class Campaign extends Timestamped {
         this.url = requestDto.getUrl();
         this.imageThumbnail = requestDto.getImageThumbnail();
         this.username = user.getUsername();
+        this.nickname = user.getNickname();
     }
 
     public void update(CampaignRequestDto requestDto) {

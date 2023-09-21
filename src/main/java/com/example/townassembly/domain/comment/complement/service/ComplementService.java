@@ -47,7 +47,7 @@ public class ComplementService {
 
     public List<ComplementResponseDto> selectedComplementList(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 유저입니다")
+                () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
         return complementRepository.findAllByForWhomOrderByCreatedAt(user)
                 .stream()
@@ -60,7 +60,7 @@ public class ComplementService {
         for (Complement complement:user.getComplementList()) {
             if (id.equals(complement.getId())) selectedComplement = complement;
         }
-        if (selectedComplement == null) throw new IllegalArgumentException("유효하지 않은 댓글입니다.");
+        if (selectedComplement == null) throw new IllegalArgumentException("유효하지 않은 정보입니다.");
         return new ComplementResponseDto(selectedComplement);
     }
 

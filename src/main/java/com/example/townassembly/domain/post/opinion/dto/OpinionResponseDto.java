@@ -12,13 +12,13 @@ public class OpinionResponseDto {
     private final Long opinionId;
     private final String opinionTitle;
     private final String opinionContent;
-    private final String opinionUsername;
+    private final String opinionNickname;
 
 
     public OpinionResponseDto(Opinion opinion) {
         this.opinionId = opinion.getId();
         this.opinionTitle = opinion.getTitle();
         this.opinionContent = opinion.getContent();
-        this.opinionUsername = opinion.getUsername();
+        this.opinionNickname = opinion.getNickname();
     }
 }

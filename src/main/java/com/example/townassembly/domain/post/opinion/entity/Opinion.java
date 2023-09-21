@@ -21,6 +21,8 @@ public class Opinion extends Timestamped {
     private Long id;
     @Column(name = "username", nullable = false)
     private String username;
+    @Column(name="nickname", nullable = false)
+    private String nickname;
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "content", nullable = false)
@@ -37,6 +39,7 @@ public class Opinion extends Timestamped {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.username = user.getUsername();
+        this.nickname = user.getNickname();
     }
 
     public void update(OpinionRequestDto requestDto) {
