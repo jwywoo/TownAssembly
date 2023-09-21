@@ -2,6 +2,7 @@ package com.example.townassembly.domain.user.controller;
 
 import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
+import com.example.townassembly.domain.user.dto.UserInfoResponseDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.follow.entity.Follow;
@@ -59,5 +60,11 @@ public class UserController {
     public List<AllUsersResponseDto> FollowingUsersList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return userService.FollowingUsersList(user);
+    }
+
+    @GetMapping("/user/userinfo")
+    public List<UserInfoResponseDto> UserInfoList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return userService.UserInfoList(user);
     }
 }

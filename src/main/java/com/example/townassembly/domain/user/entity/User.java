@@ -53,11 +53,17 @@ public class User {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    @Column(nullable = true)
+    @Column
     private String party;
 
-    @Column(nullable = true)
+    @Column
     private String location;
+
+    @Column
+    private String userIntro;
+
+    @Column
+    private String userProfilePicture;
 
     public User(String username, String password, UserRoleEnum role, String nickname, String email, String party, String location) {
         this.username = username;
