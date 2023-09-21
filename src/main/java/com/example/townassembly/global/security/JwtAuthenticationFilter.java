@@ -1,10 +1,9 @@
 package com.example.townassembly.global.security;
 
-import com.example.townassembly.global.jwt.JwtUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.townassembly.domain.user.dto.LoginRequestDto;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.global.jwt.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
