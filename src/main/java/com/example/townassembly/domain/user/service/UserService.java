@@ -4,6 +4,7 @@ import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
 import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
+import com.example.townassembly.domain.user.dto.UserInfoResponseDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.follow.entity.Follow;
@@ -168,5 +169,20 @@ public class UserService {
             followingUserDtos.add(new AllUsersResponseDto(followingUser, latestOpinion));
         }
         return followingUserDtos;
+    }
+
+    public List<UserInfoResponseDto> UserInfoList(User user) {
+        List<UserInfoResponseDto> userInfoList = new ArrayList<>();
+
+        // 로그인한 유저의 정보를 가져옵니다.
+        Optional<User> userOptional = userRepository.findById(user.getId());
+        userOptional.ifPresent(loggedInUser -> {
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto();
+            userInfoResponseDto.setUserIntro(loggedInUser.getUserIntro());
+            userInfoResponseDto.setUserProfilePicture(loggedInUser.getUserProfilePicture());
+            userInfoList.add(userInfoResponseDto);
+        });
+
+        return userInfoList;
     }
 }
