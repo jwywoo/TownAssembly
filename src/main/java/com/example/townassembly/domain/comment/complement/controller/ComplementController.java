@@ -1,11 +1,8 @@
 package com.example.townassembly.domain.comment.complement.controller;
 
 import com.example.townassembly.domain.comment.complement.dto.ComplementRequestDto;
-import com.example.townassembly.domain.comment.complement.dto.ComplementResponseDto;
-import com.example.townassembly.domain.comment.complement.entity.Complement;
 import com.example.townassembly.domain.comment.complement.service.ComplementService;
 import com.example.townassembly.global.dto.JsonResponseDto;
-import com.example.townassembly.global.dto.StringResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")

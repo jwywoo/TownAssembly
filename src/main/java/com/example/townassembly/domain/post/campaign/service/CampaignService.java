@@ -5,6 +5,7 @@ import com.example.townassembly.domain.post.campaign.dto.CampaignResponseDto;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.campaign.repository.CampaignRepository;
 import com.example.townassembly.domain.user.entity.User;
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import com.example.townassembly.global.dto.StringResponseDto;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,9 @@ public class CampaignService {
 
     @Transactional
     public CampaignResponseDto campaignCreate(CampaignRequestDto requestDto, User user) {
+        if (user.getRole().equals(UserRoleEnum.voterUser)) {
+            throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
+        }
         Campaign newCampaign = new Campaign(requestDto, user);
         user.campaignAdd(newCampaign);
         return new CampaignResponseDto(campaignRepository.save(newCampaign));
@@ -31,7 +35,7 @@ public class CampaignService {
     public List<CampaignResponseDto> campaignList(User user) {
         // 변경 예정
         return campaignRepository
-                .findAllByUsernameOrderByModifiedAtDesc(user.getUsername())
+                .findAllByUsernameOrderByCreatedAtDesc(user.getUsername())
                 .stream()
                 .map(CampaignResponseDto::new)
                 .toList();
@@ -63,6 +67,9 @@ public class CampaignService {
 
     @Transactional
     public CampaignResponseDto campaignUpdate(Long id, CampaignRequestDto requestDto, User user) {
+        if (user.getRole().equals(UserRoleEnum.voterUser)) {
+            throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
+        }
         Campaign campaign = findById(id);
         log.info(requestDto.getContent());
         if (campaign.getUsername().equals(user.getUsername())) {
@@ -74,6 +81,9 @@ public class CampaignService {
     }
 
     public StringResponseDto campaignDelete(Long id, User user) {
+        if (user.getRole().equals(UserRoleEnum.voterUser)) {
+            throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
+        }
         Campaign campaign = findById(id);
         if (campaign.getUsername().equals(user.getUsername())) {
             campaignRepository.delete(campaign);

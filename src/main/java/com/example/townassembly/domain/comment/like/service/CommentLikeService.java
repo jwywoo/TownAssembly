@@ -2,7 +2,6 @@ package com.example.townassembly.domain.comment.like.service;
 
 import com.example.townassembly.domain.comment.comment.entity.Comment;
 import com.example.townassembly.domain.comment.comment.repository.CommentRepository;
-import com.example.townassembly.domain.comment.like.dto.CommentLikeRequestDto;
 import com.example.townassembly.domain.comment.like.entity.CommentLike;
 import com.example.townassembly.domain.comment.like.repository.CommentLikeRepository;
 import com.example.townassembly.domain.user.entity.User;

@@ -1,16 +1,12 @@
 package com.example.townassembly.domain.comment.comment.entity;
 
 import com.example.townassembly.domain.comment.comment.dto.CommentRequestDto;
-import com.example.townassembly.domain.comment.like.entity.CommentLike;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

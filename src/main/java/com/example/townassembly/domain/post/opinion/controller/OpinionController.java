@@ -1,22 +1,15 @@
 package com.example.townassembly.domain.post.opinion.controller;
 
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
-import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
-import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoDetail;
-import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoList;
 import com.example.townassembly.domain.post.opinion.service.OpinionService;
 import com.example.townassembly.global.dto.JsonResponseDto;
-import com.example.townassembly.global.dto.StringResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")

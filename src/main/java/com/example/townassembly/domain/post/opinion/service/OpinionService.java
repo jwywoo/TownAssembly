@@ -2,10 +2,7 @@ package com.example.townassembly.domain.post.opinion.service;
 
 import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
 import com.example.townassembly.domain.comment.comment.entity.Comment;
-import com.example.townassembly.domain.comment.comment.repository.CommentRepository;
-import com.example.townassembly.domain.comment.like.entity.CommentLike;
 import com.example.townassembly.domain.comment.like.repository.CommentLikeRepository;
-import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.like.repository.OpinionLikeRepository;
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
 import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
@@ -14,6 +11,7 @@ import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoList;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
 import com.example.townassembly.domain.user.entity.User;
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import com.example.townassembly.global.dto.StringResponseDto;
 import jakarta.transaction.Transactional;
@@ -31,11 +29,12 @@ public class OpinionService {
     private final OpinionRepository opinionRepository;
     private final UserRepository userRepository;
     private final OpinionLikeRepository opinionLikeRepository;
-    private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
 
     public OpinionResponseDto opinionCreate(OpinionRequestDto requestDto, User user) {
-
+        if (user.getRole().equals(UserRoleEnum.voterUser)) {
+            throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
+        }
         Opinion newOpinion = new Opinion(requestDto, user);
         user.opinionAdd(newOpinion);
         return new OpinionResponseDto(opinionRepository.save(newOpinion));
@@ -43,7 +42,7 @@ public class OpinionService {
 
     public List<OpinionResponseDto> opinionList(User user) {
         return opinionRepository
-                .findAllByUsernameOrderByModifiedAtDesc(user.getUsername())
+                .findAllByUsernameOrderByCreatedAtDesc(user.getUsername())
                 .stream()
                 .map(OpinionResponseDto::new)
                 .toList();
@@ -85,6 +84,9 @@ public class OpinionService {
 
     @Transactional
     public OpinionResponseDto opinionUpdate(Long id, OpinionRequestDto requestDto, User user) {
+        if (user.getRole().equals(UserRoleEnum.voterUser)) {
+            throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
+        }
         Opinion opinion = findById(id);
         if (opinion.getUsername().equals(user.getUsername())) {
             opinion.update(requestDto);
@@ -95,6 +97,9 @@ public class OpinionService {
     }
 
     public StringResponseDto opinionDelete(Long id, User user) {
+        if (user.getRole().equals(UserRoleEnum.voterUser)) {
+            throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
+        }
         Opinion opinion = findById(id);
         if (opinion.getUsername().equals(user.getUsername())) {
             opinionRepository.delete(opinion);
