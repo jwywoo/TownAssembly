@@ -1,6 +1,5 @@
 package com.example.townassembly.domain.comment.complement.dto;
 
-import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
 import com.example.townassembly.domain.comment.complement.entity.Complement;
 import lombok.Getter;
 

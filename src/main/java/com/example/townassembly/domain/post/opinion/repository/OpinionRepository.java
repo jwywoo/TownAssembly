@@ -1,6 +1,5 @@
 package com.example.townassembly.domain.post.opinion.repository;
 
-import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

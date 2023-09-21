@@ -1,11 +1,7 @@
 package com.example.townassembly.domain.post.opinion.dto;
 
-import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class OpinionResponseDto {

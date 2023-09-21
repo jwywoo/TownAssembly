@@ -1,6 +1,5 @@
 package com.example.townassembly.domain.post.like.service;
 
-import com.example.townassembly.domain.post.like.dto.OpinionLikeRequestDto;
 import com.example.townassembly.domain.post.like.entity.OpinionLike;
 import com.example.townassembly.domain.post.like.repository.OpinionLikeRepository;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
