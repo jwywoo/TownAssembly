@@ -1,9 +1,6 @@
 package com.example.townassembly.domain.post.opinion.controller;
 
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
-import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDto;
-import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoDetail;
-import com.example.townassembly.domain.post.opinion.dto.OpinionResponseDtoList;
 import com.example.townassembly.domain.post.opinion.service.OpinionService;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.dto.StringResponseDto;
