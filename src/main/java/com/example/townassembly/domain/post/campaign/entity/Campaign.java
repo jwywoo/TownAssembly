@@ -48,11 +48,17 @@ public class Campaign extends Timestamped {
         this.nickname = user.getNickname();
     }
 
-    public void update(CampaignRequestDto requestDto) {
+    public void update(CampaignRequestModel requestDto, String imageUrl) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
-//        this.imageUrl = imageUrl;
+        this.imageUrl = imageUrl;
+    }
+
+    public void update(CampaignRequestModel requestDto) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.url = requestDto.getUrl();
     }
 
     public void setUser(User user) {

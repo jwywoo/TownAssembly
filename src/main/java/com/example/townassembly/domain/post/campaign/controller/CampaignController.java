@@ -76,15 +76,29 @@ public class CampaignController {
         ));
     }
 
-    // Update
-    @PutMapping("/campaign/{id}")
-    public ResponseEntity<JsonResponseDto> campaignUpdate(@PathVariable Long id, @RequestBody CampaignRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        log.info(requestDto.getContent());
+    // Update with Pics
+    @PutMapping(value="/campaign/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<JsonResponseDto> campaignUpdate(
+            @PathVariable Long id,
+            @RequestParam(value = "image") MultipartFile image,
+            @ModelAttribute CampaignRequestModel campaignRequestModel,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return ResponseEntity.ok(new JsonResponseDto(
                 HttpStatus.OK.value(),
-                campaignService.campaignUpdate(id, requestDto, userDetails.getUser())
+                campaignService.campaignUpdate(id, campaignRequestModel, userDetails.getUser(), image)
         ));
     }
+    // Update
+//    @PutMapping("/campaign/{id}")
+//    public ResponseEntity<JsonResponseDto> campaignUpdate(@PathVariable Long id, @RequestBody CampaignRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        log.info(requestDto.getContent());
+//        return ResponseEntity.ok(new JsonResponseDto(
+//                HttpStatus.OK.value(),
+//                campaignService.campaignUpdate(id, requestDto, userDetails.getUser())
+//        ));
+//    }
+
+
 
     // Delete
     @DeleteMapping("/campaign/{id}")
