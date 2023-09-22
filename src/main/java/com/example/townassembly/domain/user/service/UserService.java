@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +110,7 @@ public class UserService {
         return userResponseDtos;
     }
 
-    public ResponseEntity<JsonResponseDto> LocationUsersList(String location) {
+    public List<AllUsersResponseDto> LocationUsersList(String location, User users) {
         // 해당 위치 정보를 가진 모든 사용자를 가져옵니다.
         List<User> usersLocation = userRepository.findByLocation(location);
 
@@ -128,10 +129,10 @@ public class UserService {
             // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
             usersLocationDtos.add(new AllUsersResponseDto(user, latestOpinion));
         }
-        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), usersLocationDtos));
+        return usersLocationDtos;
     }
 
-    public ResponseEntity<JsonResponseDto> PartyUsersList(String party) {
+    public List<AllUsersResponseDto> PartyUsersList(String party, User users) {
         // 해당 정당 정보를 가진 모든 사용자를 가져옵니다.
         List<User> usersParty = userRepository.findByParty(party);
 
@@ -150,7 +151,7 @@ public class UserService {
             // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
             usersPartyDtos.add(new AllUsersResponseDto(user, latestOpinion));
         }
-        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), usersPartyDtos));
+        return usersPartyDtos;
     }
 
     public List<AllUsersResponseDto> FollowingUsersList(User user) {
@@ -185,6 +186,7 @@ public class UserService {
         userOptional.ifPresent(loggedInUser -> {
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto();
             userInfoResponseDto.setUserIntro(loggedInUser.getUserIntro());
+            userInfoResponseDto.setUserNickname(loggedInUser.getNickname());
             userInfoResponseDto.setUserProfilePicture(loggedInUser.getUserProfilePicture());
             userInfoList.add(userInfoResponseDto);
         });

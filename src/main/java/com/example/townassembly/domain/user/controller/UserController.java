@@ -1,9 +1,11 @@
 package com.example.townassembly.domain.user.controller;
 
+import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
 import com.example.townassembly.domain.user.dto.UserInfoResponseDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
+import com.example.townassembly.domain.user.repository.UserRepository;
 import com.example.townassembly.domain.user.service.UserService;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
@@ -44,13 +46,17 @@ public class UserController {
     }
 
     @GetMapping("/user/location")
-    public ResponseEntity<JsonResponseDto> LocationUsersList(@RequestParam("location") String location) {
-        return userService.LocationUsersList(location);
+    public ResponseEntity<JsonResponseDto> LocationUsersList(@RequestParam("location") String location,
+                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<AllUsersResponseDto> usersLocationDtos = userService.LocationUsersList(location, userDetails.getUser());
+        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), usersLocationDtos));
     }
 
     @GetMapping("/user/party")
-    public ResponseEntity<JsonResponseDto> PartyUsersList(@RequestParam("party") String party) {
-        return userService.PartyUsersList(party);
+    public ResponseEntity<JsonResponseDto> PartyUsersList(@RequestParam("party") String party,
+                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<AllUsersResponseDto> usersPartyDtos = userService.PartyUsersList(party, userDetails.getUser());
+        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), usersPartyDtos));
     }
 
     @GetMapping("/user/following")

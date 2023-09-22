@@ -15,4 +15,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
   List<User> findByLocation(String location);
   List<User> findByParty(String party);
   Optional<User> findById(Long id);
+
 }
