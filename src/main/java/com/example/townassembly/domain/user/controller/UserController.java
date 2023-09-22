@@ -66,8 +66,9 @@ public class UserController {
     }
 
     @GetMapping("/user/userinfo")
-    public ResponseEntity<List<UserInfoResponseDto>> UserInfoList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        return userService.UserInfoList(user);
+    public ResponseEntity<List<UserInfoResponseDto>> UserInfoList(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                  @ModelAttribute User user) {
+        User users = userDetails.getUser();
+        return userService.UserInfoList(users);
     }
 }
