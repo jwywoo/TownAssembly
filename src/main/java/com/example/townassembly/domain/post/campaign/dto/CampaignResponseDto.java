@@ -10,7 +10,7 @@ public class CampaignResponseDto {
     private final String campaignContent;
     private final String campaignUrl;
     private final String campaignNickname;
-    private final byte[] campaignThumbnail;
+    private final String campaignThumbnail;
 
     public CampaignResponseDto(Campaign campaign) {
         this.campaignId = campaign.getId();
@@ -18,6 +18,6 @@ public class CampaignResponseDto {
         this.campaignContent = campaign.getContent();
         this.campaignUrl = campaign.getUrl();
         this.campaignNickname = campaign.getNickname();
-        this.campaignThumbnail = campaign.getImageThumbnail();
+        this.campaignThumbnail = campaign.getImageUrl();
     }
 }
