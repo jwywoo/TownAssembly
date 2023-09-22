@@ -7,5 +7,4 @@ public class CampaignRequestDto {
     private String title;
     private String content;
     private String url;
-    private byte[] imageThumbnail;
 }

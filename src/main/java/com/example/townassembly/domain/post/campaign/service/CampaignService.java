@@ -8,28 +8,40 @@ import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import com.example.townassembly.global.dto.StringResponseDto;
+import com.example.townassembly.global.s3.S3Uploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j(topic = "CampaignService")
 public class CampaignService {
+    @Autowired
+    private S3Uploader s3Uploader;
     private final CampaignRepository campaignRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public CampaignResponseDto campaignCreate(CampaignRequestDto requestDto, User user) {
+    public CampaignResponseDto campaignCreate(CampaignRequestDto requestDto, User user, MultipartFile image) throws IOException {
         if (user.getRole().equals(UserRoleEnum.voterUser)) {
             throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
         }
-        Campaign newCampaign = new Campaign(requestDto, user);
-        user.campaignAdd(newCampaign);
-        return new CampaignResponseDto(campaignRepository.save(newCampaign));
+        if (!image.isEmpty()) {
+            String fileName = s3Uploader.upload(image, "campaign");
+            Campaign newCampaign = new Campaign(requestDto, user, fileName);
+            user.campaignAdd(newCampaign);
+            return new CampaignResponseDto(campaignRepository.save(newCampaign));
+        } else {
+            throw new IOException("사진을 추가하여 주세요");
+        }
+
     }
 
     public List<CampaignResponseDto> campaignList(User user) {

@@ -31,18 +31,18 @@ public class Campaign extends Timestamped {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name="thumbnail")
-    private byte[] imageThumbnail;
+    @Column
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Campaign(CampaignRequestDto requestDto, User user) {
+    public Campaign(CampaignRequestDto requestDto, User user, String imageUrl) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
-        this.imageThumbnail = requestDto.getImageThumbnail();
+        this.imageUrl = imageUrl;
         this.username = user.getUsername();
         this.nickname = user.getNickname();
     }
@@ -51,7 +51,7 @@ public class Campaign extends Timestamped {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();
-        this.imageThumbnail = requestDto.getImageThumbnail();
+//        this.imageUrl = imageUrl;
     }
 
     public void setUser(User user) {
