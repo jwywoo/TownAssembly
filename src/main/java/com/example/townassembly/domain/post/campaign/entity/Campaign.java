@@ -1,6 +1,7 @@
 package com.example.townassembly.domain.post.campaign.entity;
 
 import com.example.townassembly.domain.post.campaign.dto.CampaignRequestDto;
+import com.example.townassembly.domain.post.campaign.dto.CampaignRequestModel;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
@@ -38,7 +39,7 @@ public class Campaign extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Campaign(CampaignRequestDto requestDto, User user, String imageUrl) {
+    public Campaign(CampaignRequestModel requestDto, User user, String imageUrl) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.url = requestDto.getUrl();

@@ -1,6 +1,7 @@
 package com.example.townassembly.domain.post.campaign.service;
 
 import com.example.townassembly.domain.post.campaign.dto.CampaignRequestDto;
+import com.example.townassembly.domain.post.campaign.dto.CampaignRequestModel;
 import com.example.townassembly.domain.post.campaign.dto.CampaignResponseDto;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.campaign.repository.CampaignRepository;
@@ -29,7 +30,7 @@ public class CampaignService {
     private final UserRepository userRepository;
 
     @Transactional
-    public CampaignResponseDto campaignCreate(CampaignRequestDto requestDto, User user, MultipartFile image) throws IOException {
+    public CampaignResponseDto campaignCreate(CampaignRequestModel requestDto, User user, MultipartFile image) throws IOException {
         if (user.getRole().equals(UserRoleEnum.voterUser)) {
             throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
         }

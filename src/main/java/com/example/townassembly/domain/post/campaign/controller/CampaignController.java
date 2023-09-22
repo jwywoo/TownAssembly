@@ -2,7 +2,9 @@ package com.example.townassembly.domain.post.campaign.controller;
 
 
 import com.example.townassembly.domain.post.campaign.dto.CampaignRequestDto;
+import com.example.townassembly.domain.post.campaign.dto.CampaignRequestModel;
 import com.example.townassembly.domain.post.campaign.dto.CampaignResponseDto;
+import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.campaign.service.CampaignService;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
@@ -25,15 +27,15 @@ public class CampaignController {
     private final CampaignService campaignService;
 
     // Create with Pics
-    @PostMapping(value = "/campaign", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/campaign", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<JsonResponseDto> campaignCreate(
             @RequestParam(value = "image") MultipartFile image,
-            @RequestBody CampaignRequestDto requestDto,
+            @ModelAttribute CampaignRequestModel campaignRequestModel,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) throws IOException {
         return ResponseEntity.ok(new JsonResponseDto(
                         HttpStatus.OK.value(),
-                        campaignService.campaignCreate(requestDto, userDetails.getUser(), image)
+                        campaignService.campaignCreate(campaignRequestModel, userDetails.getUser(), image)
                 )
         );
     }
