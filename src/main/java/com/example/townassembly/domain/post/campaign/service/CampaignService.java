@@ -79,14 +79,19 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignResponseDto campaignUpdate(Long id, CampaignRequestDto requestDto, User user) {
+    public CampaignResponseDto campaignUpdate(Long id, CampaignRequestModel requestDto, User user,MultipartFile image) throws IOException {
         if (user.getRole().equals(UserRoleEnum.voterUser)) {
             throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
         }
+
         Campaign campaign = findById(id);
-        log.info(requestDto.getContent());
         if (campaign.getUsername().equals(user.getUsername())) {
-            campaign.update(requestDto);
+            if (!image.isEmpty()) {
+                String fileName = s3Uploader.upload(image, "campaign");
+                campaign.update(requestDto, fileName);
+            } else {
+                campaign.update(requestDto);
+            }
         } else {
             throw new IllegalArgumentException("수정이 불가능합니다.");
         }
