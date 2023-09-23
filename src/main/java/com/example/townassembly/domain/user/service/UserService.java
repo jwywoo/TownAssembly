@@ -12,6 +12,7 @@ import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.s3.S3Uploader;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,7 @@ public class UserService {
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
+    @Transactional
     public List<SignupResponseDto> signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
@@ -95,6 +97,7 @@ public class UserService {
         return userInfoList;
     }
 
+    @Transactional
     public List<AllUsersResponseDto> AllUsersList(UserRoleEnum userRoleEnum) {
         // "USER" 권한을 가진 모든 사용자를 가져옵니다.
         List<User> users = userRepository.findByRole(UserRoleEnum.USER);
@@ -117,6 +120,7 @@ public class UserService {
         return userResponseDtos;
     }
 
+    @Transactional
     public List<AllUsersResponseDto> LocationUsersList(String location, User users) {
         // 해당 위치 정보를 가진 모든 사용자를 가져옵니다.
         List<User> usersLocation = userRepository.findByLocation(location);
@@ -139,6 +143,7 @@ public class UserService {
         return usersLocationDtos;
     }
 
+    @Transactional
     public List<AllUsersResponseDto> PartyUsersList(String party, User users) {
         // 해당 정당 정보를 가진 모든 사용자를 가져옵니다.
         List<User> usersParty = userRepository.findByParty(party);
@@ -161,6 +166,7 @@ public class UserService {
         return usersPartyDtos;
     }
 
+    @Transactional
     public List<AllUsersResponseDto> FollowingUsersList(User user) {
         // 로그인한 유저가 팔로우한 사람들의 목록을 가져옵니다.
         List<Follow> followingList = followRepository.findByUser(user);

@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/user/profile")
+@RequestMapping("/api/profile")
 @RequiredArgsConstructor
 public class UserProfileController {
 
