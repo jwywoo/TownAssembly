@@ -13,8 +13,13 @@ public class UserInfoRequestDto {
     @NotBlank
     private String username;
 
+    @Size(min = 8, max = 20, message = "비밀번호는 8~20자리까지만 가능합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9!#%@?]*$", message = "비밀번호는 대/소문자, 숫자,특수문자 가능합니다.")
+    @NotBlank
+    private String password;
+
     private String userIntro;
-    private String userProfilePicture;
+    private String imageUrl;
     private String nickname;
 
     private String party;

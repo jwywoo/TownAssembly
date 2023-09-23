@@ -4,12 +4,15 @@ import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
 import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
+import com.example.townassembly.domain.user.dto.SignupResponseDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.follow.entity.Follow;
 import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
+import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.s3.S3Uploader;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +35,8 @@ public class UserService {
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    public ResponseEntity<String> signup(SignupRequestDto requestDto) {
+    @Transactional
+    public List<SignupResponseDto> signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
         String nickname = requestDto.getNickname();
@@ -74,16 +78,26 @@ public class UserService {
             role = UserRoleEnum.voterUser;
             User user = new User(username, password, role, nickname, email);
             userRepository.save(user);
-            return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
 
+            // SignupResponseDto 객체 생성
+            SignupResponseDto responseDto = new SignupResponseDto(user);
+            List<SignupResponseDto> userInfoList = new ArrayList<>();
+            userInfoList.add(responseDto);
+            return userInfoList;
         }
 
         // 사용자 등록
         User user = new User(username, password, role, nickname, email, party, location);
         userRepository.save(user);
-        return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
+
+        // SignupResponseDto 객체 생성
+        SignupResponseDto responseDto = new SignupResponseDto(user);
+        List<SignupResponseDto> userInfoList = new ArrayList<>();
+        userInfoList.add(responseDto);
+        return userInfoList;
     }
 
+    @Transactional
     public List<AllUsersResponseDto> AllUsersList(UserRoleEnum userRoleEnum) {
         // "USER" 권한을 가진 모든 사용자를 가져옵니다.
         List<User> users = userRepository.findByRole(UserRoleEnum.USER);
@@ -106,6 +120,7 @@ public class UserService {
         return userResponseDtos;
     }
 
+    @Transactional
     public List<AllUsersResponseDto> LocationUsersList(String location, User users) {
         // 해당 위치 정보를 가진 모든 사용자를 가져옵니다.
         List<User> usersLocation = userRepository.findByLocation(location);
@@ -128,6 +143,7 @@ public class UserService {
         return usersLocationDtos;
     }
 
+    @Transactional
     public List<AllUsersResponseDto> PartyUsersList(String party, User users) {
         // 해당 정당 정보를 가진 모든 사용자를 가져옵니다.
         List<User> usersParty = userRepository.findByParty(party);
@@ -150,6 +166,7 @@ public class UserService {
         return usersPartyDtos;
     }
 
+    @Transactional
     public List<AllUsersResponseDto> FollowingUsersList(User user) {
         // 로그인한 유저가 팔로우한 사람들의 목록을 가져옵니다.
         List<Follow> followingList = followRepository.findByUser(user);
