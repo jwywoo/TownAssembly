@@ -1,14 +1,20 @@
 package com.example.townassembly.domain.user.service;
 
+import com.example.townassembly.domain.user.dto.ModifyPasswordRequestDto;
 import com.example.townassembly.domain.user.dto.UserInfoRequestDto;
 import com.example.townassembly.domain.user.dto.UserInfoResponseDto;
 import com.example.townassembly.domain.user.entity.User;
-import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.repository.UserRepository;
+import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.s3.S3Uploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,9 +27,10 @@ import java.util.Optional;
 public class UserProfileService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final S3Uploader s3Uploader;
 
-    // 내 정보 수정 페이지에 들어갔을 때 필요한 데이터를 불러온다.
+
     public List<UserInfoResponseDto> modifyProfile(User user) {
         List<UserInfoResponseDto> userInfoResponseDtos = new ArrayList<>();
 
@@ -42,7 +49,7 @@ public class UserProfileService {
         return userInfoResponseDtos;
     }
 
-    // 내 정보 수정에서 '수정'버튼을 누르면 기존에 저장된 데이터를 업데이트 한다.
+
     @Transactional
     public List<UserInfoResponseDto> modifyProfileSave(User user, UserInfoRequestDto userInfoRequestDto) {
         List<UserInfoResponseDto> userInfoResponseDtos = new ArrayList<>();
@@ -83,6 +90,7 @@ public class UserProfileService {
         return userInfoResponseDtos;
     }
 
+
     @Transactional
     public UserInfoResponseDto uploadProfileImage(User user, MultipartFile image)
             throws IOException {
@@ -91,9 +99,27 @@ public class UserProfileService {
         if (!image.isEmpty()) {
             String fileName = s3Uploader.upload(image, "userProfile");
             user1.update(fileName);
-            return new UserInfoResponseDto(user1.getUserProfilePicture());
+            return new UserInfoResponseDto(user1.getImageUrl());
         } else {
             throw new IllegalArgumentException("사진이 없습니다. 사진을 넣어주세요.");
         }
+    }
+
+    @Transactional
+    public ResponseEntity<JsonResponseDto> modifyPassword(User user,
+            @RequestBody ModifyPasswordRequestDto modifyPasswordRequestDto) {
+
+        // 현재 비밀번호가 맞는지 확인
+        if (!passwordEncoder.matches(modifyPasswordRequestDto.getCurrentPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new JsonResponseDto(HttpStatus.BAD_REQUEST.value(), "현재 비밀번호가 일치하지 않습니다."));
+        }
+
+        // 새 비밀번호로 업데이트
+        String encodedNewPassword = passwordEncoder.encode(modifyPasswordRequestDto.getNewPassword());
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "비밀번호가 성공적으로 변경되었습니다."));
     }
 }

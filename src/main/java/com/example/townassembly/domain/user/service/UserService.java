@@ -4,11 +4,13 @@ import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
 import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
+import com.example.townassembly.domain.user.dto.SignupResponseDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.follow.entity.Follow;
 import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
+import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +34,7 @@ public class UserService {
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    public ResponseEntity<String> signup(SignupRequestDto requestDto) {
+    public List<SignupResponseDto> signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
         String nickname = requestDto.getNickname();
@@ -74,14 +76,23 @@ public class UserService {
             role = UserRoleEnum.voterUser;
             User user = new User(username, password, role, nickname, email);
             userRepository.save(user);
-            return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
 
+            // SignupResponseDto 객체 생성
+            SignupResponseDto responseDto = new SignupResponseDto(user);
+            List<SignupResponseDto> userInfoList = new ArrayList<>();
+            userInfoList.add(responseDto);
+            return userInfoList;
         }
 
         // 사용자 등록
         User user = new User(username, password, role, nickname, email, party, location);
         userRepository.save(user);
-        return ResponseEntity.status(200).body("상태코드 : " + HttpStatus.OK.value() + ", 메세지 : 회원가입 성공");
+
+        // SignupResponseDto 객체 생성
+        SignupResponseDto responseDto = new SignupResponseDto(user);
+        List<SignupResponseDto> userInfoList = new ArrayList<>();
+        userInfoList.add(responseDto);
+        return userInfoList;
     }
 
     public List<AllUsersResponseDto> AllUsersList(UserRoleEnum userRoleEnum) {

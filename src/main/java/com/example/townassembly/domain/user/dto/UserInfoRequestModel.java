@@ -16,7 +16,7 @@ public class UserInfoRequestModel {
     private String username;
 
     private String userIntro;
-    private String userProfilePicture;
+    private String imageUrl;
     private String nickname;
 
     private String party = "";

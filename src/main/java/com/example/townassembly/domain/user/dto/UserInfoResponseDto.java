@@ -14,10 +14,10 @@ public class UserInfoResponseDto {
     private String location;
     private String userIntro;
     private String nickname;
-    private String userProfilePicture;
+    private String imageUrl;
 
-    public UserInfoResponseDto(String userProfilePicture) {
-        this.userProfilePicture = userProfilePicture;
+    public UserInfoResponseDto(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public UserInfoResponseDto(User user) {

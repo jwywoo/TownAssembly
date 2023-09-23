@@ -66,7 +66,7 @@ public class User {
     private String userIntro;
 
     @Column
-    private String userProfilePicture;
+    private String imageUrl;
 
     public User(String username, String password, UserRoleEnum role, String nickname, String email, String party, String location) {
         this.username = username;
@@ -78,8 +78,8 @@ public class User {
         this.location = location;
     }
 
-    public User(String userProfilePicture) {
-        this.userProfilePicture = userProfilePicture;
+    public User(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public User(UserInfoRequestModel requestDto) {
@@ -120,6 +120,6 @@ public class User {
     }
 
     public void update(String imageUrl) {
-        this.userProfilePicture = imageUrl;
+        this.imageUrl = imageUrl;
     }
 }
