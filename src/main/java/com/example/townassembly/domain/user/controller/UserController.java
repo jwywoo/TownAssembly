@@ -1,7 +1,9 @@
 package com.example.townassembly.domain.user.controller;
 
+import com.example.townassembly.domain.post.campaign.dto.CampaignRequestModel;
 import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
+import com.example.townassembly.domain.user.dto.UserInfoRequestModel;
 import com.example.townassembly.domain.user.dto.UserInfoResponseDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
@@ -13,12 +15,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -63,12 +68,5 @@ public class UserController {
     public ResponseEntity<JsonResponseDto>  FollowingUsersList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.FollowingUsersList(user)));
-    }
-
-    @GetMapping("/user/userinfo")
-    public ResponseEntity<List<UserInfoResponseDto>> UserInfoList(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                  @ModelAttribute User user) {
-        User users = userDetails.getUser();
-        return userService.UserInfoList(users);
     }
 }
