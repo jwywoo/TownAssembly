@@ -5,8 +5,10 @@ import com.example.townassembly.domain.comment.complement.entity.Complement;
 import com.example.townassembly.domain.comment.like.entity.CommentLike;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
+import com.example.townassembly.domain.user.dto.UserInfoRequestModel;
 import com.example.townassembly.domain.user.follow.entity.Follow;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Data
 @NoArgsConstructor
 @Table(name = "User")
 public class User {
@@ -74,6 +77,15 @@ public class User {
         this.party = party;
         this.location = location;
     }
+
+    public User(String userProfilePicture) {
+        this.userProfilePicture = userProfilePicture;
+    }
+
+    public User(UserInfoRequestModel requestDto) {
+        this.nickname = requestDto.getNickname();
+        this.userIntro = requestDto.getUserIntro();
+    }
   
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<CommentLike> likedWhat = new ArrayList<>();
@@ -105,5 +117,9 @@ public class User {
     public void opinionAdd(Opinion opinion) {
         this.opinionList.add(opinion);
         opinion.setUser(this);
+    }
+
+    public void update(String imageUrl) {
+        this.userProfilePicture = imageUrl;
     }
 }

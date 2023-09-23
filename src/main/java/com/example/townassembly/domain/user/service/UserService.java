@@ -4,19 +4,17 @@ import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
 import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
-import com.example.townassembly.domain.user.dto.UserInfoResponseDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.follow.entity.Follow;
 import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
-import com.example.townassembly.global.dto.JsonResponseDto;
+import com.example.townassembly.global.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +28,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final OpinionRepository opinionRepository;
     private final FollowRepository followRepository;
-
-    private User user;
 
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
@@ -176,21 +172,5 @@ public class UserService {
             followingUserDtos.add(new AllUsersResponseDto(followingUser, latestOpinion));
         }
         return followingUserDtos;
-    }
-
-    public ResponseEntity<List<UserInfoResponseDto>> UserInfoList(User user) {
-        List<UserInfoResponseDto> userInfoList = new ArrayList<>();
-
-        // 로그인한 유저의 정보를 가져옵니다.
-        Optional<User> userOptional = userRepository.findById(user.getId());
-        userOptional.ifPresent(loggedInUser -> {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto();
-            userInfoResponseDto.setUserIntro(loggedInUser.getUserIntro());
-            userInfoResponseDto.setUserNickname(loggedInUser.getNickname());
-            userInfoResponseDto.setUserProfilePicture(loggedInUser.getUserProfilePicture());
-            userInfoList.add(userInfoResponseDto);
-        });
-
-        return ResponseEntity.ok().body(userInfoList);
     }
 }
