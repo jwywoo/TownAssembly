@@ -41,7 +41,7 @@ public class OpinionController {
     }
     // Specific User's opinionList
     @GetMapping("/opinions/{id}")
-    public ResponseEntity<JsonResponseDto> selectedOpinionList(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<JsonResponseDto> selectedUserOpinionList(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(
                 new JsonResponseDto(
                         HttpStatus.OK.value(),
