@@ -97,25 +97,26 @@ public class UserService {
         return userInfoList;
     }
 
+
     @Transactional
     public List<AllUsersResponseDto> AllUsersList(UserRoleEnum userRoleEnum) {
         // "USER" 권한을 가진 모든 사용자를 가져옵니다.
-        List<User> users = userRepository.findByRole(UserRoleEnum.USER);
+        List<User> users = userRepository.findAllByRole(UserRoleEnum.USER);
+        // findBy -> 1 (x)
+        // findAllBy -> N
 
         // users 리스트와 해당 사용자의 의견 정보를 가져옵니다.
         List<AllUsersResponseDto> userResponseDtos = new ArrayList<>();
-
         for (User user : users) {
             // 각 사용자의 최신 의견을 가져옵니다.
-            Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(user.getId());
-
-            // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
-            if (latestOpinion == null) {
-                latestOpinion = new Opinion(); // 빈 객체 생성 또는 기본 값을 사용할 수 있음
+            //
+            List<Opinion> currUserOpinions = opinionRepository.findAllByUserOrderByCreatedAt(user);
+            if (currUserOpinions.size()== 0) {
+                userResponseDtos.add(new AllUsersResponseDto(user, ""));
             }
-
-            // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
-            userResponseDtos.add(new AllUsersResponseDto(user, latestOpinion));
+            else {
+                userResponseDtos.add(new AllUsersResponseDto(user, currUserOpinions.get(0).getTitle()));
+            }
         }
         return userResponseDtos;
     }
@@ -123,22 +124,19 @@ public class UserService {
     @Transactional
     public List<AllUsersResponseDto> LocationUsersList(String location, User users) {
         // 해당 위치 정보를 가진 모든 사용자를 가져옵니다.
-        List<User> usersLocation = userRepository.findByLocation(location);
+        List<User> usersLocation = userRepository.findAllByLocation(location);
 
         // 사용자 정보와 해당 사용자의 최신 의견 정보를 가져옵니다.
         List<AllUsersResponseDto> usersLocationDtos = new ArrayList<>();
-
         for (User user : usersLocation) {
             // 각 사용자의 최신 의견을 가져옵니다.
-            Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(user.getId());
-
-            // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
-            if (latestOpinion == null) {
-                latestOpinion = new Opinion(); // 빈 객체 생성 또는 기본 값을 사용할 수 있음
+            List<Opinion> currUserOpinions = opinionRepository.findAllByUserOrderByCreatedAt(user);
+            if (currUserOpinions.size()== 0) {
+                usersLocationDtos.add(new AllUsersResponseDto(user, ""));
             }
-
-            // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
-            usersLocationDtos.add(new AllUsersResponseDto(user, latestOpinion));
+            else {
+                usersLocationDtos.add(new AllUsersResponseDto(user, currUserOpinions.get(0).getTitle()));
+            }
         }
         return usersLocationDtos;
     }
@@ -146,22 +144,19 @@ public class UserService {
     @Transactional
     public List<AllUsersResponseDto> PartyUsersList(String party, User users) {
         // 해당 정당 정보를 가진 모든 사용자를 가져옵니다.
-        List<User> usersParty = userRepository.findByParty(party);
+        List<User> usersParty = userRepository.findAllByParty(party);
 
         // 사용자 정보와 해당 사용자의 최신 의견 정보를 가져옵니다.
         List<AllUsersResponseDto> usersPartyDtos = new ArrayList<>();
-
         for (User user : usersParty) {
             // 각 사용자의 최신 의견을 가져옵니다.
-            Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(user.getId());
-
-            // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
-            if (latestOpinion == null) {
-                latestOpinion = new Opinion(); // 빈 객체 생성 또는 기본 값을 사용할 수 있음
+            List<Opinion> currUserOpinions = opinionRepository.findAllByUserOrderByCreatedAt(user);
+            if (currUserOpinions.size()== 0) {
+                usersPartyDtos.add(new AllUsersResponseDto(user, ""));
             }
-
-            // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
-            usersPartyDtos.add(new AllUsersResponseDto(user, latestOpinion));
+            else {
+                usersPartyDtos.add(new AllUsersResponseDto(user, currUserOpinions.get(0).getTitle()));
+            }
         }
         return usersPartyDtos;
     }
@@ -178,7 +173,7 @@ public class UserService {
             User followingUser = follow.getForWhom();
 
             // 각 팔로우한 사용자의 최신 의견을 가져옵니다.
-            Opinion latestOpinion = opinionRepository.findLatestOpinionByUserId(followingUser.getId());
+            Opinion latestOpinion = opinionRepository.findAllByUserOrderByCreatedAt(user).get(0);
 
             // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
             if (latestOpinion == null) {
@@ -186,7 +181,7 @@ public class UserService {
             }
 
             // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
-            followingUserDtos.add(new AllUsersResponseDto(followingUser, latestOpinion));
+            followingUserDtos.add(new AllUsersResponseDto(followingUser, latestOpinion.getTitle()));
         }
         return followingUserDtos;
     }

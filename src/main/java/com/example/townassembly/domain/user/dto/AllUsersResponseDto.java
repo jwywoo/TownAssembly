@@ -14,12 +14,12 @@ public class AllUsersResponseDto {
     private final UserRoleEnum role;
     private final String opinionTitle;
 
-    public AllUsersResponseDto(User user, Opinion opinion) {
+    public AllUsersResponseDto(User user, String opinionTitle) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.party = user.getParty();
         this.location = user.getLocation();
         this.role = user.getRole();
-        this.opinionTitle = opinion.getTitle();
+        this.opinionTitle = opinionTitle;
     }
 }
