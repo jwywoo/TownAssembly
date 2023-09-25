@@ -2,6 +2,7 @@ package com.example.townassembly.domain.comment.complement.entity;
 
 import com.example.townassembly.domain.comment.complement.dto.ComplementRequestDto;
 import com.example.townassembly.domain.user.entity.User;
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,6 +29,9 @@ public class Complement extends Timestamped {
     @Column(name ="content", nullable = false)
     private String content;
 
+    @Column(name = "role")
+    private UserRoleEnum role;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -39,6 +43,7 @@ public class Complement extends Timestamped {
     public Complement(ComplementRequestDto requestDto, User user) {
         this.username = user.getUsername();
         this.nickname = user.getNickname();
+        this.role = user.getRole();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
