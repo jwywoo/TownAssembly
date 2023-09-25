@@ -51,7 +51,7 @@ public class OpinionController {
     }
 
     // User Detail
-    @GetMapping("/opinions")
+    @GetMapping("/opinion")
     public ResponseEntity<JsonResponseDto> selectedUserOpinionDetail(
             @RequestParam("opinionId") Long opinionId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(
