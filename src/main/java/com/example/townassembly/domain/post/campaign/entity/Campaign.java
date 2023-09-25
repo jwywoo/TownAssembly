@@ -3,6 +3,7 @@ package com.example.townassembly.domain.post.campaign.entity;
 import com.example.townassembly.domain.post.campaign.dto.CampaignRequestDto;
 import com.example.townassembly.domain.post.campaign.dto.CampaignRequestModel;
 import com.example.townassembly.domain.user.entity.User;
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,6 +36,9 @@ public class Campaign extends Timestamped {
     @Column
     private String imageUrl;
 
+    @Column
+    private UserRoleEnum role;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -46,6 +50,7 @@ public class Campaign extends Timestamped {
         this.imageUrl = imageUrl;
         this.username = user.getUsername();
         this.nickname = user.getNickname();
+        this.role = user.getRole();
     }
 
     public void update(CampaignRequestModel requestDto, String imageUrl) {
