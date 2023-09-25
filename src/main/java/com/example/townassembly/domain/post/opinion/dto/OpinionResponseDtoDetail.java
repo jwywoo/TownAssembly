@@ -2,6 +2,7 @@ package com.example.townassembly.domain.post.opinion.dto;
 
 import com.example.townassembly.domain.comment.comment.dto.CommentResponseDto;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import lombok.Getter;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class OpinionResponseDtoDetail {
     private final String opinionContent;
     private final String opinionNickname;
     private final List<CommentResponseDto> commentResponseDtoList;
+    private final UserRoleEnum opinionRole;
     // Like Status, Like Count need
     private final Boolean likeStat;
     private final Integer likeCount;
@@ -23,6 +25,7 @@ public class OpinionResponseDtoDetail {
         this.opinionContent = opinion.getContent();
         this.opinionNickname = opinion.getNickname();
         this.commentResponseDtoList = comments;
+        this.opinionRole = opinion.getRole();
         this.likeStat = likeStat;
         this.likeCount = likeCount;
     }
