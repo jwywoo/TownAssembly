@@ -11,7 +11,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,26 +38,24 @@ public class UserProfileService {
 
         userOptional.ifPresent(loggedInUser -> {
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-            userInfoResponseDto.setUsername(loggedInUser.getUsername());
             userInfoResponseDto.setUserIntro(loggedInUser.getUserIntro());
             userInfoResponseDto.setUserNickname(loggedInUser.getNickname());
             userInfoResponseDto.setEmail(loggedInUser.getEmail());
             userInfoResponseDto.setParty(loggedInUser.getParty());
+
             userInfoResponseDtos.add(userInfoResponseDto);
         });
         return userInfoResponseDtos;
     }
 
-
     @Transactional
-    public List<UserInfoResponseDto> modifyProfileSave(User user, UserInfoRequestDto userInfoRequestDto) {
-        List<UserInfoResponseDto> userInfoResponseDtos = new ArrayList<>();
-
-        // 로그인한 유저의 정보를 가져옵니다.
+    public UserInfoResponseDto modifyProfileSave(User user, UserInfoRequestDto userInfoRequestDto) {
         Optional<User> userOptional = userRepository.findById(user.getId());
 
-        userOptional.ifPresent(loggedInUser -> {
-            // 여기서 UserInfoRequestDto의 필드를 사용하여 유저 정보를 업데이트합니다.
+        if (userOptional.isPresent()) {
+            User loggedInUser = userOptional.get();
+
+            // 업데이트를 시도할 필드만 확인하고 업데이트합니다.
             if (userInfoRequestDto.getUserIntro() != null) {
                 loggedInUser.setUserIntro(userInfoRequestDto.getUserIntro());
             }
@@ -78,18 +75,13 @@ public class UserProfileService {
             // 업데이트된 유저 정보를 저장합니다.
             userRepository.save(loggedInUser);
 
-            // 업데이트된 정보를 UserInfoResponseDto에 담아서 리스트에 추가합니다.
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(loggedInUser);
-            userInfoResponseDto.setUserIntro(loggedInUser.getUserIntro());
-            userInfoResponseDto.setUserNickname(loggedInUser.getNickname());
-            userInfoResponseDto.setEmail(loggedInUser.getEmail());
-            userInfoResponseDto.setParty(loggedInUser.getParty());
-            userInfoResponseDto.setLocation(loggedInUser.getLocation());
-            userInfoResponseDtos.add(userInfoResponseDto);
-        });
-        return userInfoResponseDtos;
+            // 업데이트된 정보를 UserInfoResponseDto에 담아서 반환합니다.
+            return new UserInfoResponseDto(loggedInUser);
+        } else {
+            // 사용자를 찾을 수 없는 경우 예외 처리 또는 다른 방식으로 처리합니다.
+            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
+        }
     }
-
 
     @Transactional
     public UserInfoResponseDto uploadProfileImage(User user, MultipartFile image)
