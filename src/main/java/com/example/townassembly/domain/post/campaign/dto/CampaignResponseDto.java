@@ -1,6 +1,7 @@
 package com.example.townassembly.domain.post.campaign.dto;
 
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import lombok.Getter;
 
 @Getter
@@ -11,6 +12,7 @@ public class CampaignResponseDto {
     private final String campaignUrl;
     private final String campaignNickname;
     private final String campaignThumbnail;
+    private final UserRoleEnum campaignRole;
 
     public CampaignResponseDto(Campaign campaign) {
         this.campaignId = campaign.getId();
@@ -19,5 +21,6 @@ public class CampaignResponseDto {
         this.campaignUrl = campaign.getUrl();
         this.campaignNickname = campaign.getNickname();
         this.campaignThumbnail = campaign.getImageUrl();
+        this.campaignRole = campaign.getRole();
     }
 }

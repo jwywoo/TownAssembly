@@ -3,6 +3,7 @@ package com.example.townassembly.domain.comment.comment.entity;
 import com.example.townassembly.domain.comment.comment.dto.CommentRequestDto;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.user.entity.User;
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,6 +30,9 @@ public class Comment extends Timestamped {
     @Column(name ="content", nullable = false)
     private String content;
 
+    @Column(name="role")
+    private UserRoleEnum role;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "opinion_id", nullable = false)
     private Opinion opinion;
@@ -40,6 +44,7 @@ public class Comment extends Timestamped {
     public Comment(CommentRequestDto requestDto, User user) {
         this.username = user.getUsername();
         this.nickname = user.getNickname();
+        this.role = user.getRole();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
