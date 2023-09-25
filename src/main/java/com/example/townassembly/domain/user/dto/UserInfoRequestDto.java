@@ -1,5 +1,6 @@
 package com.example.townassembly.domain.user.dto;
 
+import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -24,6 +25,7 @@ public class UserInfoRequestDto {
 
     private String party;
     private String location;
+    private UserRoleEnum role;
 
     @Email
     @Pattern(regexp = "^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\\.[A-Za-z0-9\\-]+$", message = "이메일은 영문 대/소문자, 숫자만 입력 가능합니다.")

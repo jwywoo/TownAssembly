@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class UserInfoResponseDto {
     private String username;
     private String email;
@@ -15,6 +14,7 @@ public class UserInfoResponseDto {
     private String userIntro;
     private String nickname;
     private String imageUrl;
+    private UserRoleEnum role;
 
     public UserInfoResponseDto(String imageUrl) {
         this.imageUrl = imageUrl;
@@ -25,13 +25,16 @@ public class UserInfoResponseDto {
         this.email = user.getEmail();
         this.party = user.getParty();
         this.location = user.getLocation();
-    }
-
-    public void setUserIntro(String userIntro) {
-        this.userIntro = userIntro;
+        this.role = user.getRole();
+        this.userIntro = user.getUserIntro();
+        this.nickname = user.getNickname();
     }
 
     public void setUserNickname(String nickname) { this.nickname = nickname; }
 
+    public void setEmail(String email) { this.email = email;}
 
+    public void setParty(String party) {this.party = party;}
+
+    public void setUserIntro(String userIntro) { this.userIntro = userIntro;}
 }
