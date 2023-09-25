@@ -19,11 +19,11 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDto(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(JwtException.class)
+    @ExceptionHandler({JwtException.class})
     public ResponseEntity<ErrorResponseDto> jwtExHandler(
             JwtException e) {
         return ResponseEntity.badRequest()
-                .body(new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+                .body(new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), e.getMessage()));
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
