@@ -12,6 +12,7 @@ public class AllUsersResponseDto {
     private final String location;
     private final UserRoleEnum role;
     private final String opinionTitle;
+    private final String imageUrl;
 
     public AllUsersResponseDto(User user, String opinionTitle) {
         this.userId = user.getId();
@@ -20,5 +21,6 @@ public class AllUsersResponseDto {
         this.location = user.getLocation();
         this.role = user.getRole();
         this.opinionTitle = opinionTitle;
+        this.imageUrl = user.getImageUrl();
     }
 }
