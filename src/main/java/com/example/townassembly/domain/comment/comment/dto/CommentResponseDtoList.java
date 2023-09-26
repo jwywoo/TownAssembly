@@ -6,15 +6,17 @@ import lombok.Getter;
 
 @Getter
 public class CommentResponseDtoList {
-    private final String title;
-    private final String nickname;
-    private final String content;
+    private final Long commentId;
+    private final String commentTitle;
+    private final String commentNickname;
+    private final String commentContent;
     private final UserRoleEnum role;
 
     public CommentResponseDtoList(Comment comment) {
-        this.title = comment.getTitle();
-        this.nickname = comment.getNickname();
-        this.content = comment.getContent();
+        this.commentId = comment.getId();
+        this.commentTitle = comment.getTitle();
+        this.commentNickname = comment.getNickname();
+        this.commentContent = comment.getContent();
         this.role = comment.getRole();
     }
 }
