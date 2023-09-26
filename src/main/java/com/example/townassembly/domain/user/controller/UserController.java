@@ -86,9 +86,13 @@ public class UserController {
         return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.userInfoList(user)));
     }
 
-//    @GetMapping("/user/{id}")
-//    public ResponseEntity<JsonResponseDto> UserIntroList(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        User user = userDetails.getUser();
-//        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.userIntroList(id, user)));
-//    }
+    @GetMapping("/user/followingUsers/{id}")
+    public ResponseEntity<JsonResponseDto> getFollowingUsers(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.getFollowingUsers(id, user)));
+        } catch (JwtException e) {
+            throw new JwtException("유효하지 않은 회원 정보입니다.");
+        }
+    }
 }

@@ -15,6 +15,8 @@ public class Follow extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private boolean followStat;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -27,5 +29,9 @@ public class Follow extends Timestamped {
     }
     public void setForWhom(User forWhom) {
         this.forWhom = forWhom;
+    }
+
+    public void setFollowStat(User user) {
+        this.followStat = followStat;
     }
 }

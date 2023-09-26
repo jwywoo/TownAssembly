@@ -203,17 +203,19 @@ public class UserService {
         return userInfoResponseDtos;
     }
 
-//    @Transactional
-//    public List<InfoResponseDto> userIntroList(Long id, User user) {
-//        Optional<User> userOptional = userRepository.findById(id);
-//
-//        if (!userOptional.isPresent()) {
-//            // 사용자가 존재하지 않는 경우 예외 처리
-//            throw new NotFoundException("사용자를 찾을 수 없습니다.");
-//        }
-//
-//        User existingUser = userOptional.get();
-//
-//        InfoResponseDto infoResponseDto = new InfoResponseDto(existingUser.getUserIntro(), existingUser.getNickname(), existingUser.getImageUrl(), existingUser.);
-//    }
+    @Transactional
+    public List<User> getFollowingUsers(Long id, User user) {
+        // 로그인한 유저가 팔로우한 사람들의 목록을 가져옵니다.
+        List<Follow> followingList = followRepository.findByUser(user);
+
+        // 팔로우한 사용자 목록을 저장할 리스트를 초기화합니다.
+        List<User> followingUsers = new ArrayList<>();
+
+        for (Follow follow : followingList) {
+            User followingUser = follow.getForWhom();
+            followingUsers.add(followingUser);
+        }
+        return followingUsers;
+    }
+
 }

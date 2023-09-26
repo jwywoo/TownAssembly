@@ -38,6 +38,7 @@ public class UserProfileService {
 
         userOptional.ifPresent(loggedInUser -> {
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
+            userInfoResponseDto.setUserId(loggedInUser.getId());
             userInfoResponseDto.setUserIntro(loggedInUser.getUserIntro());
             userInfoResponseDto.setUserNickname(loggedInUser.getNickname());
             userInfoResponseDto.setEmail(loggedInUser.getEmail());
@@ -56,6 +57,7 @@ public class UserProfileService {
             User loggedInUser = userOptional.get();
 
             // 업데이트를 시도할 필드만 확인하고 업데이트합니다.
+
             if (userInfoRequestDto.getUserIntro() != null) {
                 loggedInUser.setUserIntro(userInfoRequestDto.getUserIntro());
             }
@@ -71,7 +73,6 @@ public class UserProfileService {
             if (userInfoRequestDto.getLocation() != null) {
                 loggedInUser.setLocation(userInfoRequestDto.getLocation());
             }
-
             // 업데이트된 유저 정보를 저장합니다.
             userRepository.save(loggedInUser);
 
@@ -91,7 +92,7 @@ public class UserProfileService {
         if (!image.isEmpty()) {
             String fileName = s3Uploader.upload(image, "userProfile");
             user1.update(fileName);
-            return new UserInfoResponseDto(user1.getImageUrl());
+            return new UserInfoResponseDto(user, user1.getImageUrl());
         } else {
             throw new IllegalArgumentException("사진이 없습니다. 사진을 넣어주세요.");
         }

@@ -1,6 +1,9 @@
 package com.example.townassembly.domain.user.dto;
 
+import com.example.townassembly.domain.user.follow.entity.Follow;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class InfoResponseDto {
@@ -15,10 +18,6 @@ public class InfoResponseDto {
         this.imageUrl = imageUrl;
     }
 
-    public InfoResponseDto(String userIntro, String nickname, String imageUrl, Boolean followStat) {
-        this.userIntro = userIntro;
-        this.nickname = nickname;
-        this.imageUrl = imageUrl;
-        this.followStat = followStat;
+    public InfoResponseDto(List<Follow> followList) {
     }
 }
