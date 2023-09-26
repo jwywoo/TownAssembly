@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
+@Slf4j(topic = "야 여기다")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -90,31 +90,13 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/follow/{id}")
-    public ResponseEntity<JsonResponseDto> followUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @GetMapping("/user/{id}")
+    public ResponseEntity<JsonResponseDto> userStatus(@PathVariable Long id,
+                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
+            log.info(id+"여기다");
             User user = userDetails.getUser();
-            boolean followSuccess = userService.followUser(id, user);
-            if (followSuccess) {
-                return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "팔로우 성공"));
-            } else {
-                return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "이미 팔로우한 사용자입니다."));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
-        }
-    }
-
-    @PostMapping("/user/unfollow/{id}")
-    public ResponseEntity<JsonResponseDto> unfollowUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
-            User user = userDetails.getUser();
-            boolean unfollowSuccess = userService.unfollowUser(id, user);
-            if (unfollowSuccess) {
-                return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "언팔로우 성공"));
-            } else {
-                return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "이미 언팔로우한 사용자입니다."));
-            }
+            return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.userStatus(id, user)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
         }

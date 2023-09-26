@@ -231,4 +231,10 @@ public class UserService {
         }
         return false; // 이미 언팔로우한 상태이므로 언팔로우하지 않음을 나타내는 값 리턴
     }
+
+    public UserDetailPageDto userStatus(Long id, User user) {
+        User forWhomUser = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 회원입니다."));
+        Boolean followStat = followRepository.findByUserAndForWhom(user, forWhomUser) != null;
+        return new UserDetailPageDto(followStat, forWhomUser);
+    }
 }
