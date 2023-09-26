@@ -72,7 +72,7 @@ public class CommentController {
 
     // Delete
     @DeleteMapping("/comment/{id}")
-    public ResponseEntity<JsonResponseDto> stringResponseDto(
+    public ResponseEntity<JsonResponseDto> commentDelete(
             @PathVariable Long id,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
