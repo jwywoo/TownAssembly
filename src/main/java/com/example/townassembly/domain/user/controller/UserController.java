@@ -2,13 +2,11 @@ package com.example.townassembly.domain.user.controller;
 
 import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
-import com.example.townassembly.domain.user.dto.UserInfoResponseDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.service.UserService;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
-import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.rmi.ServerError;
 import java.util.List;
 
 @Slf4j
@@ -65,8 +62,8 @@ public class UserController {
             User user = userDetails.getUser();
             List<AllUsersResponseDto> usersPartyDtos = userService.PartyUsersList(party, user);
             return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), usersPartyDtos));
-        } catch (JwtException e) {
-            throw new JwtException("유효하지 않은 회원 정보입니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
         }
     }
 
@@ -75,15 +72,19 @@ public class UserController {
         try {
             User user = userDetails.getUser();
             return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.FollowingUsersList(user)));
-        } catch (JwtException e) {
-            throw new JwtException("유효하지 않은 회원 정보입니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
         }
     }
 
     @GetMapping("/user/userInfo")
     public ResponseEntity<JsonResponseDto> UserInfoList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.userInfoList(user)));
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.userInfoList(user)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
+        }
     }
 
     @GetMapping("/user/followingUsers/{id}")
@@ -91,8 +92,8 @@ public class UserController {
         try {
             User user = userDetails.getUser();
             return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.getFollowingUsers(id, user)));
-        } catch (JwtException e) {
-            throw new JwtException("유효하지 않은 회원 정보입니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
         }
     }
 }
