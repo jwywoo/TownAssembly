@@ -1,6 +1,5 @@
 package com.example.townassembly.domain.user.dto;
 
-import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import lombok.Getter;

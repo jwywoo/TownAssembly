@@ -2,9 +2,11 @@ package com.example.townassembly.domain.user.controller;
 
 import com.example.townassembly.domain.user.dto.ModifyPasswordRequestDto;
 import com.example.townassembly.domain.user.dto.UserInfoRequestDto;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.service.UserProfileService;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,8 +27,12 @@ public class UserProfileController {
     // 내 정보 수정 페이지에 들어갔을 때 필요한 데이터를 불러온다.
     @GetMapping(value = "/modify")
     public ResponseEntity<JsonResponseDto> modifyProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(),
-                userProfileService.modifyProfile(userDetails.getUser())));
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userProfileService.modifyProfile(user)));
+        } catch (JwtException e) {
+            throw new JwtException("유효하지 않은 회원 정보입니다.");
+        }
     }
 
     // 내 정보 수정에서 '수정'버튼을 누르면 기존에 저장된 데이터를 업데이트 한다.

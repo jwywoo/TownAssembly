@@ -1,21 +1,16 @@
 package com.example.townassembly.domain.user.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.townassembly.domain.post.opinion.entity.Opinion;
 import com.example.townassembly.domain.post.opinion.repository.OpinionRepository;
-import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
-import com.example.townassembly.domain.user.dto.SignupRequestDto;
-import com.example.townassembly.domain.user.dto.SignupResponseDto;
+import com.example.townassembly.domain.user.dto.*;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.follow.entity.Follow;
 import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
-import com.example.townassembly.global.dto.JsonResponseDto;
-import com.example.townassembly.global.s3.S3Uploader;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -185,4 +180,40 @@ public class UserService {
         }
         return followingUserDtos;
     }
+
+    @Transactional
+    public List<InfoResponseDto> userInfoList(User user) {
+        // 사용자 정보 조회
+        Optional<User> userOptional = userRepository.findById(user.getId());
+
+        if (!userOptional.isPresent()) {
+            // 사용자가 존재하지 않는 경우 예외 처리
+            throw new NotFoundException("사용자를 찾을 수 없습니다.");
+        }
+
+        User existingUser = userOptional.get();
+
+        // UserInfoResponseDto 객체 생성 및 사용자 정보 설정
+        InfoResponseDto infoResponseDto = new InfoResponseDto(existingUser.getUserIntro(), existingUser.getNickname(), existingUser.getImageUrl());
+
+        // 결과를 리스트에 담아 반환
+        List<InfoResponseDto> userInfoResponseDtos = new ArrayList<>();
+        userInfoResponseDtos.add(infoResponseDto);
+
+        return userInfoResponseDtos;
+    }
+
+//    @Transactional
+//    public List<InfoResponseDto> userIntroList(Long id, User user) {
+//        Optional<User> userOptional = userRepository.findById(id);
+//
+//        if (!userOptional.isPresent()) {
+//            // 사용자가 존재하지 않는 경우 예외 처리
+//            throw new NotFoundException("사용자를 찾을 수 없습니다.");
+//        }
+//
+//        User existingUser = userOptional.get();
+//
+//        InfoResponseDto infoResponseDto = new InfoResponseDto(existingUser.getUserIntro(), existingUser.getNickname(), existingUser.getImageUrl(), existingUser.);
+//    }
 }
