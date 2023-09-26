@@ -73,6 +73,7 @@ public class UserController {
     @GetMapping("/user/following")
     public ResponseEntity<JsonResponseDto> FollowingUsersList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
+
             User user = userDetails.getUser();
             return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.FollowingUsersList(user)));
         } catch (Exception e) {

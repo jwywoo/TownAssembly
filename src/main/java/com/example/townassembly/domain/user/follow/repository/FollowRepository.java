@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
     Follow findByUserAndForWhom(User user, User forWhom);
-    List<Follow> findByUser(User user);
+    List<Follow> findAllByUser(User user);
 }

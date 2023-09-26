@@ -11,6 +11,7 @@ import com.example.townassembly.domain.user.follow.repository.FollowRepository;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j(topic = "유저 서비스다")
 public class UserService {
 
     private final UserRepository userRepository;
@@ -156,24 +158,17 @@ public class UserService {
     @Transactional
     public List<AllUsersResponseDto> FollowingUsersList(User user) {
         // 로그인한 유저가 팔로우한 사람들의 목록을 가져옵니다.
-        List<Follow> followingList = followRepository.findByUser(user);
-
+        List<Follow> followingList = followRepository.findAllByUser(user);
         // 팔로우한 사용자 목록을 저장할 리스트를 초기화합니다.
         List<AllUsersResponseDto> followingUserDtos = new ArrayList<>();
-
         for (Follow follow : followingList) {
-            User followingUser = follow.getForWhom();
-
-            // 각 팔로우한 사용자의 최신 의견을 가져옵니다.
-            Opinion latestOpinion = opinionRepository.findAllByUserOrderByCreatedAt(user).get(0);
-
-            // Opinion 객체가 null이면 기본 값을 사용하거나 빈 객체를 생성합니다.
-            if (latestOpinion == null) {
-                latestOpinion = new Opinion(); // 빈 객체 생성 또는 기본 값을 사용할 수 있음
+            // 각 사용자의 최신 의견을 가져옵니다.
+            List<Opinion> currUserOpinions = opinionRepository.findAllByUserOrderByCreatedAt(follow.getForWhom());
+            if (currUserOpinions.size() == 0) {
+                followingUserDtos.add(new AllUsersResponseDto(user, ""));
+            } else {
+                followingUserDtos.add(new AllUsersResponseDto(user, currUserOpinions.get(0).getTitle()));
             }
-
-            // AllUsersResponseDto를 생성하여 리스트에 추가합니다.
-            followingUserDtos.add(new AllUsersResponseDto(followingUser, latestOpinion.getTitle()));
         }
         return followingUserDtos;
     }
