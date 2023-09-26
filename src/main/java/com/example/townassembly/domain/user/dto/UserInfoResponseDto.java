@@ -37,4 +37,6 @@ public class UserInfoResponseDto {
     public void setParty(String party) {this.party = party;}
 
     public void setUserIntro(String userIntro) { this.userIntro = userIntro;}
+
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl;}
 }
