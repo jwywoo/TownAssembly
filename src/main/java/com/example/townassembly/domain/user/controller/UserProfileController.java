@@ -6,7 +6,6 @@ import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.service.UserProfileService;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,8 +29,8 @@ public class UserProfileController {
         try {
             User user = userDetails.getUser();
             return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userProfileService.modifyProfile(user)));
-        } catch (JwtException e) {
-            throw new JwtException("유효하지 않은 회원 정보입니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
         }
     }
 
@@ -39,8 +38,12 @@ public class UserProfileController {
     @PutMapping(value = "/modify/save")
     public ResponseEntity<JsonResponseDto> modifyProfileSave(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                              @RequestBody UserInfoRequestDto userInfoRequestDto) {
-        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(),
-                userProfileService.modifyProfileSave(userDetails.getUser(), userInfoRequestDto)));
+        try {
+            return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(),
+                    userProfileService.modifyProfileSave(userDetails.getUser(), userInfoRequestDto)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
+        }
     }
 
     // 내 정보 수정에서 프로필 이미지 업로드 기능
@@ -59,6 +62,10 @@ public class UserProfileController {
     // 내 정보 수정에서 비밀번호 수정하기
     @PutMapping("/modify/password")
     public ResponseEntity<JsonResponseDto> modifyPassword(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ModifyPasswordRequestDto modifyPasswordRequestDto) {
-        return userProfileService.modifyPassword(userDetails.getUser(), modifyPasswordRequestDto);
+        try {
+            return userProfileService.modifyPassword(userDetails.getUser(), modifyPasswordRequestDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
+        }
     }
 }

@@ -3,10 +3,10 @@ package com.example.townassembly.domain.user.dto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class UserInfoResponseDto {
+    private Long userId;
     private String username;
     private String email;
     private String party;
@@ -16,11 +16,7 @@ public class UserInfoResponseDto {
     private String imageUrl;
     private UserRoleEnum role;
 
-    public UserInfoResponseDto(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public UserInfoResponseDto(User user) {
+    public UserInfoResponseDto(User user, String imageUrl) {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.party = user.getParty();
@@ -28,6 +24,20 @@ public class UserInfoResponseDto {
         this.role = user.getRole();
         this.userIntro = user.getUserIntro();
         this.nickname = user.getNickname();
+        this.userId = user.getId();
+        this.imageUrl = imageUrl;
+    }
+
+    public UserInfoResponseDto(User user) {
+        this.userId = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.party = user.getParty();
+        this.location = user.getLocation();
+        this.role = user.getRole();
+        this.userIntro = user.getUserIntro();
+        this.nickname = user.getNickname();
+        this.imageUrl = user.getImageUrl();
     }
 
     public void setUserNickname(String nickname) { this.nickname = nickname; }
@@ -38,5 +48,5 @@ public class UserInfoResponseDto {
 
     public void setUserIntro(String userIntro) { this.userIntro = userIntro;}
 
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl;}
+    public void setUserId(Long id) { this.userId = id; }
 }
