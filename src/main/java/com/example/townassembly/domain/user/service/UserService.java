@@ -69,7 +69,7 @@ public class UserService {
         }
 
         // 정당이나 지역이 입력되어 있지 않으면 아이디와 비밀번호, 역할, 활동명만 입력받고 유권자 유저로 회원가입
-        if(party.isEmpty() || location.isEmpty()) {
+        if (party.isEmpty() || location.isEmpty()) {
             role = UserRoleEnum.voterUser;
             User user = new User(username, password, role, nickname, email);
             userRepository.save(user);
@@ -106,10 +106,9 @@ public class UserService {
             // 각 사용자의 최신 의견을 가져옵니다.
             //
             List<Opinion> currUserOpinions = opinionRepository.findAllByUserOrderByCreatedAt(user);
-            if (currUserOpinions.size()== 0) {
+            if (currUserOpinions.size() == 0) {
                 userResponseDtos.add(new AllUsersResponseDto(user, ""));
-            }
-            else {
+            } else {
                 userResponseDtos.add(new AllUsersResponseDto(user, currUserOpinions.get(0).getTitle()));
             }
         }
@@ -126,10 +125,9 @@ public class UserService {
         for (User user : usersLocation) {
             // 각 사용자의 최신 의견을 가져옵니다.
             List<Opinion> currUserOpinions = opinionRepository.findAllByUserOrderByCreatedAt(user);
-            if (currUserOpinions.size()== 0) {
+            if (currUserOpinions.size() == 0) {
                 usersLocationDtos.add(new AllUsersResponseDto(user, ""));
-            }
-            else {
+            } else {
                 usersLocationDtos.add(new AllUsersResponseDto(user, currUserOpinions.get(0).getTitle()));
             }
         }
@@ -146,10 +144,9 @@ public class UserService {
         for (User user : usersParty) {
             // 각 사용자의 최신 의견을 가져옵니다.
             List<Opinion> currUserOpinions = opinionRepository.findAllByUserOrderByCreatedAt(user);
-            if (currUserOpinions.size()== 0) {
+            if (currUserOpinions.size() == 0) {
                 usersPartyDtos.add(new AllUsersResponseDto(user, ""));
-            }
-            else {
+            } else {
                 usersPartyDtos.add(new AllUsersResponseDto(user, currUserOpinions.get(0).getTitle()));
             }
         }
@@ -204,18 +201,34 @@ public class UserService {
     }
 
     @Transactional
-    public List<User> getFollowingUsers(Long id, User user) {
-        // 로그인한 유저가 팔로우한 사람들의 목록을 가져옵니다.
-        List<Follow> followingList = followRepository.findByUser(user);
+    public boolean followUser(Long id, User user) {
+        User targetUser = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("유효하지 않은 계정입니다."));
 
-        // 팔로우한 사용자 목록을 저장할 리스트를 초기화합니다.
-        List<User> followingUsers = new ArrayList<>();
-
-        for (Follow follow : followingList) {
-            User followingUser = follow.getForWhom();
-            followingUsers.add(followingUser);
+        // 이미 팔로우 중인지 확인
+        Follow existingFollow = followRepository.findByUserAndForWhom(user, targetUser);
+        if (existingFollow == null) {
+            Follow follow = new Follow();
+            follow.setUser(user);
+            follow.setForWhom(targetUser);
+            follow.setFollowStat(true); // 팔로우 상태를 true로 설정
+            followRepository.save(follow);
+            return true; // 팔로우 성공을 나타내는 값 리턴
         }
-        return followingUsers;
+        return false; // 이미 팔로우한 상태이므로 팔로우하지 않음을 나타내는 값 리턴
     }
 
+    @Transactional
+    public boolean unfollowUser(Long id, User user) {
+        User targetUser = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("유효하지 않은 계정입니다."));
+
+        // 이미 팔로우 중인지 확인
+        Follow existingFollow = followRepository.findByUserAndForWhom(user, targetUser);
+        if (existingFollow != null) {
+            followRepository.delete(existingFollow);
+            return true; // 언팔로우 성공을 나타내는 값 리턴
+        }
+        return false; // 이미 언팔로우한 상태이므로 언팔로우하지 않음을 나타내는 값 리턴
+    }
 }

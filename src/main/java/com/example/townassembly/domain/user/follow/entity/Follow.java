@@ -15,8 +15,6 @@ public class Follow extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean followStat;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -24,14 +22,15 @@ public class Follow extends Timestamped {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="forWhom_id", nullable = false)
     private User forWhom;
+
+    @Column(nullable = false)
+    private boolean followStat; // 팔로우 상태를 나타내는 변수
+    
     public void setUser(User user) {
         this.user = user;
     }
     public void setForWhom(User forWhom) {
         this.forWhom = forWhom;
     }
-
-    public void setFollowStat(User user) {
-        this.followStat = followStat;
-    }
+    public void setFollowStat(boolean followStat) { this.followStat = followStat; }
 }

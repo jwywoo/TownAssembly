@@ -4,6 +4,8 @@ import com.example.townassembly.domain.user.dto.AllUsersResponseDto;
 import com.example.townassembly.domain.user.dto.SignupRequestDto;
 import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.domain.user.entity.UserRoleEnum;
+import com.example.townassembly.domain.user.follow.entity.Follow;
+import com.example.townassembly.domain.user.repository.UserRepository;
 import com.example.townassembly.domain.user.service.UserService;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
@@ -26,6 +28,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping("/user/signup")
     public ResponseEntity<JsonResponseDto> signup(@RequestBody @Valid SignupRequestDto requestDto, BindingResult bindingResult) {
@@ -87,11 +90,31 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/followingUsers/{id}")
-    public ResponseEntity<JsonResponseDto> getFollowingUsers(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @GetMapping("/user/follow/{id}")
+    public ResponseEntity<JsonResponseDto> followUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             User user = userDetails.getUser();
-            return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), userService.getFollowingUsers(id, user)));
+            boolean followSuccess = userService.followUser(id, user);
+            if (followSuccess) {
+                return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "팔로우 성공"));
+            } else {
+                return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "이미 팔로우한 사용자입니다."));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
+        }
+    }
+
+    @PostMapping("/user/unfollow/{id}")
+    public ResponseEntity<JsonResponseDto> unfollowUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            boolean unfollowSuccess = userService.unfollowUser(id, user);
+            if (unfollowSuccess) {
+                return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "언팔로우 성공"));
+            } else {
+                return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), "이미 언팔로우한 사용자입니다."));
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponseDto(HttpStatus.FORBIDDEN.value(), "유효하지 않은 회원정보입니다."));
         }
