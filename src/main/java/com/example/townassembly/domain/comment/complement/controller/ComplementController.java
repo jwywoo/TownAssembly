@@ -2,8 +2,10 @@ package com.example.townassembly.domain.comment.complement.controller;
 
 import com.example.townassembly.domain.comment.complement.dto.ComplementRequestDto;
 import com.example.townassembly.domain.comment.complement.service.ComplementService;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,21 +22,35 @@ public class ComplementController {
 
     // Create
     @PostMapping("/complement/{id}")
-    public ResponseEntity<JsonResponseDto> complementCreate(@PathVariable Long id, @RequestBody ComplementRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), complementService.complementCreate(id, requestDto, userDetails.getUser())));
+    public ResponseEntity<JsonResponseDto> complementCreate(
+            @PathVariable Long id,
+            @RequestBody ComplementRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(new JsonResponseDto(
+                    HttpStatus.OK.value(),
+                    complementService.complementCreate(id, requestDto, user)));
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 
     // Read
     // User's complement
     @GetMapping("/complements")
     public ResponseEntity<JsonResponseDto> complementList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(
-                new JsonResponseDto(
-                        HttpStatus.OK.value(),
-                        complementService.complementList(userDetails.getUser()
-                        )
-                )
-        );
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(
+                    new JsonResponseDto(
+                            HttpStatus.OK.value(),
+                            complementService.complementList(user)
+                    )
+            );
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 
     // Specific User's complement
@@ -49,34 +65,57 @@ public class ComplementController {
     }
 
     @GetMapping("/complement/{id}")
-    public ResponseEntity<JsonResponseDto> complementDetail(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(
-                new JsonResponseDto(
-                        HttpStatus.OK.value(),
-                        complementService.complementDetail(id, userDetails.getUser())
-                        )
-        );
+    public ResponseEntity<JsonResponseDto> complementDetail(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(
+                    new JsonResponseDto(
+                            HttpStatus.OK.value(),
+                            complementService.complementDetail(id, user)
+                    )
+            );
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 
     // Update
     @PutMapping("/complement/{id}")
-    public ResponseEntity<JsonResponseDto> complementUpdate(@PathVariable Long id, @RequestBody ComplementRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(
-                new JsonResponseDto(
-                        HttpStatus.OK.value(),
-                        complementService.complementUpdate(id, requestDto, userDetails.getUser())
-                        )
-        );
+    public ResponseEntity<JsonResponseDto> complementUpdate(
+            @PathVariable Long id,
+            @RequestBody ComplementRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(
+                    new JsonResponseDto(
+                            HttpStatus.OK.value(),
+                            complementService.complementUpdate(id, requestDto, user)
+                    )
+            );
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 
     // Delete
     @DeleteMapping("/complement/{id}")
-    public ResponseEntity<JsonResponseDto> complementDelete(@PathVariable Long id, @RequestBody ComplementRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(
-                new JsonResponseDto(
-                        HttpStatus.OK.value(),
-                        complementService.complementDelete(id, userDetails.getUser())
-                        )
-        );
+    public ResponseEntity<JsonResponseDto> complementDelete(
+            @PathVariable Long id,
+            @RequestBody ComplementRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(
+                    new JsonResponseDto(
+                            HttpStatus.OK.value(),
+                            complementService.complementDelete(id, user)
+                    )
+            );
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 }

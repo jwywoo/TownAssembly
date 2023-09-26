@@ -6,8 +6,10 @@ import com.example.townassembly.domain.post.campaign.dto.CampaignRequestModel;
 import com.example.townassembly.domain.post.campaign.dto.CampaignResponseDto;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.campaign.service.CampaignService;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,16 +30,19 @@ public class CampaignController {
 
     // Create with Pics
     @PostMapping(value = "/campaign", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<JsonResponseDto> campaignCreate(
-            @RequestParam(value = "image") MultipartFile image,
-            @ModelAttribute CampaignRequestModel campaignRequestModel,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) throws IOException {
-        return ResponseEntity.ok(new JsonResponseDto(
-                        HttpStatus.OK.value(),
-                        campaignService.campaignCreate(campaignRequestModel, userDetails.getUser(), image)
-                )
-        );
+    public ResponseEntity<JsonResponseDto> campaignCreate(@RequestParam(value = "image") MultipartFile image,
+                                                          @ModelAttribute CampaignRequestModel campaignRequestModel,
+                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(new JsonResponseDto(
+                            HttpStatus.OK.value(),
+                            campaignService.campaignCreate(campaignRequestModel, user, image)
+                    )
+            );
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 
 //     Create
@@ -53,10 +58,14 @@ public class CampaignController {
     // User's campaign
     @GetMapping("/campaigns")
     public ResponseEntity<JsonResponseDto> campaignList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(new JsonResponseDto(
-                HttpStatus.OK.value(),
-                campaignService.campaignList(userDetails.getUser())
-        ));
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(
+                    new JsonResponseDto(HttpStatus.OK.value(),
+                    campaignService.campaignList(user)));
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 
     // Selected User's campaign
@@ -69,24 +78,34 @@ public class CampaignController {
     }
 
     @GetMapping("/campaign/{id}")
-    public ResponseEntity<JsonResponseDto> campaignDetail(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(new JsonResponseDto(
-                HttpStatus.OK.value(),
-                campaignService.campaignDetail(id, userDetails.getUser())
-        ));
+    public ResponseEntity<JsonResponseDto> campaignDetail(@PathVariable Long id,
+                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(new JsonResponseDto(
+                    HttpStatus.OK.value(),
+                    campaignService.campaignDetail(id, user)
+            ));
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 
     // Update with Pics
-    @PutMapping(value="/campaign/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<JsonResponseDto> campaignUpdate(
-            @PathVariable Long id,
-            @RequestParam(value = "image") MultipartFile image,
-            @ModelAttribute CampaignRequestModel campaignRequestModel,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-        return ResponseEntity.ok(new JsonResponseDto(
-                HttpStatus.OK.value(),
-                campaignService.campaignUpdate(id, campaignRequestModel, userDetails.getUser(), image)
-        ));
+    @PutMapping(value = "/campaign/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<JsonResponseDto> campaignUpdate(@PathVariable Long id,
+                                                          @RequestParam(value = "image") MultipartFile image,
+                                                          @ModelAttribute CampaignRequestModel campaignRequestModel,
+                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(new JsonResponseDto(
+                    HttpStatus.OK.value(),
+                    campaignService.campaignUpdate(id, campaignRequestModel, user, image)
+            ));
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
     // Update
 //    @PutMapping("/campaign/{id}")
@@ -99,13 +118,18 @@ public class CampaignController {
 //    }
 
 
-
     // Delete
     @DeleteMapping("/campaign/{id}")
-    public ResponseEntity<JsonResponseDto> campaignDelete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(new JsonResponseDto(
-                HttpStatus.OK.value(),
-                campaignService.campaignDelete(id, userDetails.getUser())
-        ));
+    public ResponseEntity<JsonResponseDto> campaignDelete(@PathVariable Long id,
+                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            User user = userDetails.getUser();
+            return ResponseEntity.ok(new JsonResponseDto(
+                    HttpStatus.OK.value(),
+                    campaignService.campaignDelete(id, user)
+            ));
+        } catch (Exception e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 }

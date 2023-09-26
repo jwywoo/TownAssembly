@@ -11,6 +11,7 @@ public class OpinionResponseDto {
     private final String opinionContent;
     private final String opinionNickname;
     private final UserRoleEnum opinionRole;
+    private final String opinionImageUrl;
 
 
     public OpinionResponseDto(Opinion opinion) {
@@ -19,5 +20,6 @@ public class OpinionResponseDto {
         this.opinionContent = opinion.getContent();
         this.opinionNickname = opinion.getNickname();
         this.opinionRole = opinion.getRole();
+        this.opinionImageUrl = opinion.getImageUrl();
     }
 }
