@@ -1,15 +1,21 @@
 package com.example.townassembly.domain.post.opinion.controller;
 
 import com.example.townassembly.domain.post.opinion.dto.OpinionRequestDto;
+import com.example.townassembly.domain.post.opinion.dto.OpinionRequestModel;
 import com.example.townassembly.domain.post.opinion.service.OpinionService;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
@@ -19,12 +25,16 @@ public class OpinionController {
     private final OpinionService opinionService;
 
     // Create
-    @PostMapping("/opinion")
-    public ResponseEntity<JsonResponseDto> opinionCreate(@RequestBody OpinionRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    @PostMapping(value = "/opinion", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<JsonResponseDto> opinionCreate(
+            @RequestParam(value = "image") MultipartFile image,
+            @ModelAttribute OpinionRequestModel requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) throws IOException {
         return ResponseEntity.ok(
                 new JsonResponseDto(
                         HttpStatus.OK.value(),
-                        opinionService.opinionCreate(requestDto, userDetails.getUser())
+                        opinionService.opinionCreate(requestDto, userDetails.getUser(), image)
                 )
         );
     }
@@ -63,12 +73,17 @@ public class OpinionController {
     }
 
     // Update
-    @PutMapping("/opinion/{id}")
-    public ResponseEntity<JsonResponseDto> opinionUpdate(@PathVariable Long id, @RequestBody OpinionRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    @PutMapping(value = "/opinion/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<JsonResponseDto> opinionUpdate(
+            @PathVariable Long id,
+            @RequestParam(value = "image") MultipartFile image,
+            @ModelAttribute OpinionRequestModel requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) throws IOException {
         return ResponseEntity.ok(
                 new JsonResponseDto(
                         HttpStatus.OK.value(),
-                        opinionService.opinionUpdate(id, requestDto, userDetails.getUser())
+                        opinionService.opinionUpdate(id, requestDto, userDetails.getUser(), image)
                         )
         );
     }

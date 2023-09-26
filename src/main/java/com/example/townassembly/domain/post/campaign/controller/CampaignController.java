@@ -6,8 +6,10 @@ import com.example.townassembly.domain.post.campaign.dto.CampaignRequestModel;
 import com.example.townassembly.domain.post.campaign.dto.CampaignResponseDto;
 import com.example.townassembly.domain.post.campaign.entity.Campaign;
 import com.example.townassembly.domain.post.campaign.service.CampaignService;
+import com.example.townassembly.domain.user.entity.User;
 import com.example.townassembly.global.dto.JsonResponseDto;
 import com.example.townassembly.global.security.UserDetailsImpl;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -53,10 +55,7 @@ public class CampaignController {
     // User's campaign
     @GetMapping("/campaigns")
     public ResponseEntity<JsonResponseDto> campaignList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(new JsonResponseDto(
-                HttpStatus.OK.value(),
-                campaignService.campaignList(userDetails.getUser())
-        ));
+         return ResponseEntity.ok(new JsonResponseDto(HttpStatus.OK.value(), campaignService.campaignList(userDetails.getUser())));
     }
 
     // Selected User's campaign

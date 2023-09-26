@@ -10,6 +10,7 @@ import com.example.townassembly.domain.user.entity.UserRoleEnum;
 import com.example.townassembly.domain.user.repository.UserRepository;
 import com.example.townassembly.global.dto.StringResponseDto;
 import com.example.townassembly.global.s3.S3Uploader;
+import com.example.townassembly.global.security.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class CampaignService {
             throw new IllegalArgumentException("사용할 수 없는 기능입니다.");
         }
         if (!image.isEmpty()) {
-            String fileName = s3Uploader.upload(image, "campaign");
+            String fileName = s3Uploader.upload(image, "campaign/" + user.getUsername());
             Campaign newCampaign = new Campaign(requestDto, user, fileName);
             user.campaignAdd(newCampaign);
             return new CampaignResponseDto(campaignRepository.save(newCampaign));
@@ -87,7 +88,7 @@ public class CampaignService {
         Campaign campaign = findById(id);
         if (campaign.getUsername().equals(user.getUsername())) {
             if (!image.isEmpty()) {
-                String fileName = s3Uploader.upload(image, "campaign");
+                String fileName = s3Uploader.upload(image, "campaign/" + user.getUsername());
                 campaign.update(requestDto, fileName);
             } else {
                 campaign.update(requestDto);
