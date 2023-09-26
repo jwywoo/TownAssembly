@@ -13,6 +13,7 @@ public class OpinionResponseDtoList {
     private final UserRoleEnum opinionRole;
     private final Boolean likeStat;
     private final Integer likeCount;
+    private final String opinionImageUrl;
 
 
     public OpinionResponseDtoList(Opinion opinion, Boolean likeStat, Integer likeCount) {
@@ -21,6 +22,7 @@ public class OpinionResponseDtoList {
         this.opinionContent = opinion.getContent();
         this.opinionNickname = opinion.getNickname();
         this.opinionRole = opinion.getRole();
+        this.opinionImageUrl = opinion.getImageUrl();
         this.likeStat = likeStat;
         this.likeCount = likeCount;
     }

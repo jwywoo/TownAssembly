@@ -104,7 +104,6 @@ public class ComplementController {
     @DeleteMapping("/complement/{id}")
     public ResponseEntity<JsonResponseDto> complementDelete(
             @PathVariable Long id,
-            @RequestBody ComplementRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             User user = userDetails.getUser();

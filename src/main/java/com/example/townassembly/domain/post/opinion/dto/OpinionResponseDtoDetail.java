@@ -15,6 +15,7 @@ public class OpinionResponseDtoDetail {
     private final String opinionNickname;
     private final List<CommentResponseDto> commentResponseDtoList;
     private final UserRoleEnum opinionRole;
+    private final String opinionImageUrl;
     // Like Status, Like Count need
     private final Boolean likeStat;
     private final Integer likeCount;
@@ -24,6 +25,7 @@ public class OpinionResponseDtoDetail {
         this.opinionTitle = opinion.getTitle();
         this.opinionContent = opinion.getContent();
         this.opinionNickname = opinion.getNickname();
+        this.opinionImageUrl = opinion.getImageUrl();
         this.commentResponseDtoList = comments;
         this.opinionRole = opinion.getRole();
         this.likeStat = likeStat;
