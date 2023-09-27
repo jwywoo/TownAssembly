@@ -165,9 +165,9 @@ public class UserService {
             // 각 사용자의 최신 의견을 가져옵니다.
             List<Opinion> currUserOpinions = opinionRepository.findAllByUserOrderByCreatedAt(follow.getForWhom());
             if (currUserOpinions.size() == 0) {
-                followingUserDtos.add(new AllUsersResponseDto(user, ""));
+                followingUserDtos.add(new AllUsersResponseDto(follow.getForWhom(), ""));
             } else {
-                followingUserDtos.add(new AllUsersResponseDto(user, currUserOpinions.get(0).getTitle()));
+                followingUserDtos.add(new AllUsersResponseDto(follow.getForWhom(), currUserOpinions.get(0).getTitle()));
             }
         }
         return followingUserDtos;
